@@ -195,8 +195,8 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
                      WinGet, winid, ID, %programName%
                      DllCall("SwitchToThisWindow", "UInt", winid, "UInt", 1)
                      WinActivate, A
-                     Sleep, 100
-                     WinMaximize, A
+                     ; Sleep, 100
+                     ; WinMaximize, A
                   }
                }
                else 
@@ -230,8 +230,8 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
                               WinGet, winid, ID, %programName%
                               DllCall("SwitchToThisWindow", "UInt", winid, "UInt", 1)
                               WinActivate, A
-                              Sleep, 100
-                              WinMaximize, A
+                              ; Sleep, 100
+                              ; WinMaximize, A
                            }
                         }
                      }
