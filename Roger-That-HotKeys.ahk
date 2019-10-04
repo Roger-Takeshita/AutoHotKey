@@ -546,21 +546,27 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
          program := "ahk_exe explorer.exe"
          ;Alt + 1 -------------------------------- File Explorer View as List
             !1::
-               SetTimer detect_key_released, 50	
-               WinActive(program)
-               Send ^+{5}
+               SetTimer detect_key_released, 50
+               ControlFocus, DirectUIHWND3, A
+               Send ^!{5}
             Return
          ;Alt + 2 -------------------------------- File Explorer View as List + Size
             !2::
-               SetTimer detect_key_released, 50	
-               WinActive(program)
-               Send ^+{6}
+               SetTimer detect_key_released, 50
+               ControlFocus, DirectUIHWND3, A
+               Send ^!{6}
             Return
          ;Alt + 3 -------------------------------- File Explorer View as Folder
             !3::
                SetTimer detect_key_released, 50
-               WinActive(program)
-               Send ^+{2}
+               ControlFocus, DirectUIHWND3, A
+               Send ^!{2}
+            Return
+         ;Alt + 4 -------------------------------- File Explorer View as Large Files
+            !4::
+               SetTimer detect_key_released, 50
+               ControlFocus, DirectUIHWND3, A
+               Send ^!{1}
             Return
          ;---------------------------------------- Detect if Alt Key was released
             detect_key_released:
