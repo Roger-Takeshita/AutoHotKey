@@ -367,7 +367,45 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
             return true
          }
       }
-
+   ;----------------------------------------------------------- Custom Image Click True/False/doNothing
+      SearchImageClick(imageName,x1,y1,x2,y2)
+      {
+         WinGetActiveStats, Title, Width, Height, X, Y
+         ; MsgBox The active window "%Title%" is %Width% wide`, %Height% tall`, and positioned at %X%`,%Y%.
+         if (X = -8 && Y = -8) {
+            X := X + 8   ;Position X = 0
+            Y := Y + 8   ;Position Y = 0
+         }
+         if (x2 = 0) {
+            x2 := Width
+         }
+         if (y2 = 0) {
+            y2 := Height
+         }
+         ; MsgBox INIT X%x1%Y%y1% FINAL X%x2%Y%y2%
+         ImageSearch, FoundX, FoundY, %x1%, %y1%, %x2%, %y2%, %A_WorkingDir%\Images\%imageName%.bmp
+         if ErrorLevel = 2
+         {
+            MsgBox Your image either doesn't exist or isn't in this location.
+            return "doNothing"
+         }
+         else if ErrorLevel = 1
+         {
+            ; tooltip Image could not be found on the screen.
+            ; sleep 2000
+            ; tooltip
+            return
+         }
+         else
+         {
+            ; tooltip Found! Location %FoundX%x%FoundY%.
+            ; sleep 2000
+            ; tooltip
+            SendEvent {click %FoundX%,%Foundy%}
+            MouseMove, Width/2,Height/2
+            return
+         }
+      }
 ;===================================================================================;
 ;                      _    _    _    __   _                __                      ;
 ;                     |_)  |_)  / \  /__  |_)   /\   |\/|  (_                       ;
@@ -599,6 +637,10 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
             !g::
                Send ^{g}
             return
+         ;Alt + R -------------------------------- Reload Python Program
+            !r:: 
+               Send ^{r}
+            Return
          ;Alt + T -------------------------------- New File
             !t::
                Send ^{n}
@@ -627,7 +669,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
             !WheelDown::
                tabRight()
             Return
-         ;Ctrl + F -------------------------------- Find
+         ;Ctrl + F ------------------------------- Find
             ^f::
                ; imageName = Sublime-Search-002
                ; statusSearch := SearchImage(imageName,0,720,0,0)
@@ -637,6 +679,10 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
                   Send ^{f}
                ; }
             return
+         ;Ctrl + T ------------------------------- New File
+            ^t::
+               Send ^{n}
+            Return
       #IfWinActive
    ;----------------------------------------------------------- Visual Studio Code
       #IfWinActive ahk_exe Code.exe
@@ -674,6 +720,11 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
                } else if (statusSearch = false) {
                   Send ^+{h}
                }
+            return
+         ;Alt + R -------------------------------- Run File in Terminal
+            !r::
+               imageName = VS-Code-Run-Terminal-001
+               statusSearcha := SearchImageClick(imageName,0,20,0,80)
             return
          ;Alt + T -------------------------------- New File
             !t::
