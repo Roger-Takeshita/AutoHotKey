@@ -333,19 +333,6 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
    ;----------------------------------------------------------- Custom Image True/False/doNothing
       SearchImage(imageName,x1,y1,x2,y2)
       {
-         WinGetActiveStats, Title, Width, Height, X, Y
-         ; MsgBox The active window "%Title%" is %Width% wide`, %Height% tall`, and positioned at %X%`,%Y%.
-         if (X = -8 && Y = -8) {
-            X := X + 8   ;Position X = 0
-            Y := Y + 8   ;Position Y = 0
-         }
-         if (x2 = 0) {
-            x2 := Width
-         }
-         if (y2 = 0) {
-            y2 := Height
-         }
-         ; MsgBox INIT X%x1%Y%y1% FINAL X%x2%Y%y2%
          ImageSearch, FoundX, FoundY, %x1%, %y1%, %x2%, %y2%, %A_WorkingDir%\Images\%imageName%.bmp
          if ErrorLevel = 2
          {
@@ -354,9 +341,6 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
          }
          else if ErrorLevel = 1
          {
-            ; tooltip Image could not be found on the screen.
-            ; sleep 2000
-            ; tooltip
             return false
          }
          else
@@ -368,21 +352,8 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
          }
       }
    ;----------------------------------------------------------- Custom Image Click True/False/doNothing
-      SearchImageClick(imageName,x1,y1,x2,y2)
+      SearchImageClick(imageName,x1,y1,x2,y2,wid,hei)
       {
-         WinGetActiveStats, Title, Width, Height, X, Y
-         ; MsgBox The active window "%Title%" is %Width% wide`, %Height% tall`, and positioned at %X%`,%Y%.
-         if (X = -8 && Y = -8) {
-            X := X + 8   ;Position X = 0
-            Y := Y + 8   ;Position Y = 0
-         }
-         if (x2 = 0) {
-            x2 := Width
-         }
-         if (y2 = 0) {
-            y2 := Height
-         }
-         ; MsgBox INIT X%x1%Y%y1% FINAL X%x2%Y%y2%
          ImageSearch, FoundX, FoundY, %x1%, %y1%, %x2%, %y2%, %A_WorkingDir%\Images\%imageName%.bmp
          if ErrorLevel = 2
          {
@@ -391,10 +362,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
          }
          else if ErrorLevel = 1
          {
-            ; tooltip Image could not be found on the screen.
-            ; sleep 2000
-            ; tooltip
-            return
+            return false
          }
          else
          {
@@ -402,8 +370,8 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
             ; sleep 2000
             ; tooltip
             SendEvent {click %FoundX%,%Foundy%}
-            MouseMove, Width/2,Height/2
-            return
+            MouseMove, wid/2,hei/2
+            return true
          }
       }
 ;===================================================================================;
@@ -571,13 +539,13 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
                tabRight()
             Return
 
-            !WheelUp::
-               tabLeft()
-            Return
+            ; !WheelUp::
+            ;    tabLeft()
+            ; Return
 
-            !WheelDown::
-               tabRight()
-            Return
+            ; !WheelDown::
+            ;    tabRight()
+            ; Return
       #IfWinActive
    ;----------------------------------------------------------- Explorer
       #IfWinActive ahk_exe explorer.exe
@@ -623,16 +591,6 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
             !b::
                Send ^{b}
             Return
-         ;Alt + F -------------------------------- Find / Find and Replace in Folder 
-            !f::
-               ; imageName = Sublime-Search-001
-               ; statusSearch := SearchImage(imageName,0,720,0,0)
-               ; if (statusSearch = true) {
-               ;    Send {ESC}
-               ; } else if (statusSearch = false) {
-                  Send ^+{f}
-               ; }
-            return
          ;Alt + G -------------------------------- Go to Line
             !g::
                Send ^{g}
@@ -669,16 +627,6 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
             !WheelDown::
                tabRight()
             Return
-         ;Ctrl + F ------------------------------- Find
-            ^f::
-               ; imageName = Sublime-Search-002
-               ; statusSearch := SearchImage(imageName,0,720,0,0)
-               ; if (statusSearch = true) {
-               ;    Send {ESC}
-               ; } else if (statusSearch = false) {
-                  Send ^{f}
-               ; }
-            return
          ;Ctrl + T ------------------------------- New File
             ^t::
                Send ^{n}
@@ -690,7 +638,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
          ;Alt + B -------------------------------- Project Folder
             !b::
                imageName = VS-Code-Explorer
-               statusSearch := SearchImage(imageName,0,35,0,110)
+               statusSearch := SearchImage(imageName,0,0,300,70)
                if (statusSearch = true) {
                   Send ^{b}
                } else if (statusSearch = false) {
@@ -700,7 +648,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
          ;Alt + F -------------------------------- Find / Find and Replace in Folder 
             !f::
                imageName = VS-Code-Search-001
-               statusSearch := SearchImage(imageName,0,35,0,110)
+               statusSearch := SearchImage(imageName,0,0,300,70)
                if (statusSearch = true) {
                   Send ^{b}
                } else if (statusSearch = false) {
@@ -714,7 +662,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
          ;Alt + H -------------------------------- Find and Replace Local
             !h::
                imageName = VS-Code-Search-001
-               statusSearch := SearchImage(imageName,0,35,0,110)
+               statusSearch := SearchImage(imageName,0,0,300,70)
                if (statusSearch = true) {
                   Send ^{b}
                } else if (statusSearch = false) {
@@ -723,8 +671,16 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
             return
          ;Alt + R -------------------------------- Run File in Terminal
             !r::
-               imageName = VS-Code-Run-Terminal-001
-               statusSearcha := SearchImageClick(imageName,0,20,0,80)
+               imageName = VS-Code-Run-Terminal-002
+               WinGetActiveStats, Title, Width, Height, X, Y
+               statusSearch := SearchImageClick(imageName,Width - 300,0,Width,70, Width, Height)
+               if (statusSearch = false) {
+                  SplashTextOn, [ Width, Height, Title, Text]
+                  SplashTextOn,500,200,AutoHotKey,Roger-That's Hotkey's been reloaded.
+                  Sleep 1000
+                  SplashTextOff
+                  Reload
+               }
             return
          ;Alt + T -------------------------------- New File
             !t::
@@ -754,7 +710,16 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
             !WheelDown::
                tabRight()
             Return
-
+         ;Ctrl + B ------------------------------- Project Folder
+            ^b::
+               imageName = VS-Code-Explorer
+               statusSearch := SearchImage(imageName,0,0,300,70)
+               if (statusSearch = true) {
+                  Send ^{b}
+               } else if (statusSearch = false) {
+                  Send ^+{e}
+               }
+            Return
       #IfWinActive
    ;----------------------------------------------------------- WhatsApp
       #IfWinActive ahk_exe WhatsApp.exe
@@ -1012,62 +977,75 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ;      /   / \  |\/|  |\/|  |_  |\ |   |   |_  | \    /   / \  | \  |_  (_          ;
 ;      \_  \_/  |  |  |  |  |_  | \|   |   |_  |_/    \_  \_/  |_/  |_  __)         ;
 ;===================================================================================;
-   ;----------------------------------------------------------- Close Everything     
-      ;#c::     
-      ; WinGet, id, list, , , Program Manager     
-      ; Loop, %id%     
-      ; {     
-      ;   StringTrimRight,this_id, id%a_index%, 0     
-      ;   WinGetTitle, this_title, ahk_id %this_id%
-      ;   if !WinActive("ahk_exe WhatsApp.exe"){     
-      ;     ;MsgBox, %this_title%
-      ;     winclose,%this_title%     
-      ;   }         
-      ; }     
-      ;return
-   ;----------------------------------------------------------- Open Code Folder
-      ;#c::
-      ;	Run ::{20d04fe0-3aea-1069-a2d8-08002b30309d}\C:\Users\%A_Username%\Box Sync\Box\Arduino\Codes
-      ;	GroupAdd, rogerExplorers, ahk_class CabinetWClass
-      ;return
    ;----------------------------------------------------------- Key Map
       ; #InstallKeybdHook
       ; ^!t::
       ; 	KeyHistory
-      ; Return
-   ;----------------------------------------------------------- Find Fodler
-      ; Loops through all programs and open folder to check if the there is one named Downloads open
-      ; #!t::
-      ;    WinGet, id, list, , , Program Manager
-      ;    Loop, %id%
-      ;    {
-      ;      StringTrimRight,this_id, id%a_index%, 0
-      ;      WinGetTitle, this_title, ahk_id %this_id%
-      ;      if (this_title = "Downloads")
-      ;      {
-      ;        MsgBox, %this_title%
-      ;        break
-      ;      }
+      ; return
+   ;Right Ctrl ------------------------------------------------ Double Pressed
+      ; ~RControl::
+      ;    if (A_PriorHotkey != "~RControl" or A_TimeSincePriorHotkey > 400) {
+      ;       ; Too much time between presses, so this isn't a double-press.
+      ;       KeyWait, RControl
+      ;       return
       ;    }
-      ;    return
+      ;    MsgBox You double-pressed the right control key.
+      ; return
    ;Win + Alt + T --------------------------------------------- Test
       #!t::
-         Loop, 540
-         {
-            if (A_Index < 8) {
-               SendEvent {click 666,13}
-            } else if (A_Index >= 8 and A_Index < 100) {
-               SendEvent {click 673,13}
-            } else {
-               SendEvent {click 679,12}
-            }
-            Sleep 100
-            MouseMove, 800,13
-            Sleep 3000
-            Send {PrintScreen}
-            Sleep 500
-            Send {Enter}
-            Sleep 1000
-         }
-         return
-   
+         ;---------------------------------------------- Get Active Window Size/Position
+            ; WinGetActiveStats, Title, Width, Height, X, Y
+            ; MsgBox, The active window "%Title%" is %Width% wide`, %Height% tall`, and positioned at %X%`,%Y%.
+         ;---------------------------------------------- Mouse Move x1,y1 - x2,y2
+            WinGetActiveStats, Title, Width, Height, X, Y
+            x1 := 0
+            y1 := 0
+            x2 := 300
+            y2 := 80
+            MouseMove, x1,y1
+            Sleep, 1000
+            MouseMove, x2,y2
+            ; MsgBox, "position" %x1% "x" %Y% " - " %Width% "x" %y2%
+         ;---------------------------------------------- Get Book Online
+            ; Loop, 540
+            ; {
+            ;    if (A_Index < 8) {
+            ;       SendEvent {click 666,13}
+            ;    } else if (A_Index >= 8 and A_Index < 100) {
+            ;       SendEvent {click 673,13}
+            ;    } else {
+            ;       SendEvent {click 679,12}
+            ;    }
+            ;    Sleep 100
+            ;    MouseMove, 800,13
+            ;    Sleep 3000
+            ;    Send {PrintScreen}
+            ;    Sleep 500
+            ;    Send {Enter}
+            ;    Sleep 1000
+            ; }
+         ;---------------------------------------------- Find Folder
+            ; Loops through all programs and open folder to check if the there is one named Downloads open
+            ; WinGet, id, list, , , Program Manager
+            ; Loop, %id%
+            ; {
+            ;    StringTrimRight,this_id, id%a_index%, 0
+            ;    WinGetTitle, this_title, ahk_id %this_id%
+            ;    if (this_title = "Downloads")
+            ;    {
+            ;       MsgBox, %this_title%
+            ;       break
+            ;    }
+            ; }
+         ;---------------------------------------------- Close Everything
+            ; WinGet, id, list, , , Program Manager
+            ; Loop, %id%
+            ; {
+            ;   StringTrimRight,this_id, id%a_index%, 0
+            ;   WinGetTitle, this_title, ahk_id %this_id%
+            ;   if !WinActive("ahk_exe WhatsApp.exe"){
+            ;     ;MsgBox, %this_title%
+            ;     winclose,%this_title%
+            ;   }
+            ; }
+      return
