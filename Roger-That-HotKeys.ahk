@@ -2,6 +2,7 @@
 ; #Warn  ; Enable warnings to assist with detecting common errors.
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
+programs_PID := {}
 ;===================================================================================;
 ;               _    _   _  ___        ___  ___  ___   _          __                ;
 ;              | \  |_  |_   |   |\ |   |    |    |   / \  |\ |  (_                 ;
@@ -22,23 +23,23 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
    ;----------------------------------------------------------- Mouse Position
       ; #Persistent
       ; SetTimer, WatchCursor, 100
-      ; return
+      ; Return
 
       ; WatchCursor:
       ; MouseGetPos, xpos, ypos, id, control
       ; ToolTip, X%xpos% Y%ypos%
-      ; return
+      ; Return
    ;----------------------------------------------------------- Mouse Over Info
       ; #Persistent
       ; SetTimer, WatchCursor, 100
-      ; return
+      ; Return
 
       ; WatchCursor:
       ; MouseGetPos, xpos, ypos, id, control
       ; WinGetTitle, title, ahk_id %id%
       ; WinGetClass, class, ahk_id %id%
       ; ToolTip, X%xpos% Y%ypos% ahk_id %id%`nahk_class %class%`n%title%`nControl: %control%
-      ; return
+      ; Return
 
 ;===================================================================================;
 ;                    _              _  ___  ___   _          __                     ;
@@ -75,214 +76,113 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
          send ^{tab}
       }
    ;----------------------------------------------------------- Window Move
-      CenterWindow(WinTitle)
+      CenterWindow()
       {
-       ;WinGetPos,,, Width, Height, %WinTitle%
-       WinMove, %WinTitle%,, A_ScreenWidth/2-(A_ScreenWidth*0.40)/2, A_ScreenHeight/5, A_ScreenWidth*0.40, A_ScreenHeight-A_ScreenHeight/3
-       ;WinMaximize, A
+         WinGetTitle, WinTitle, A
+         WinMove, %WinTitle%,, A_ScreenWidth/2-(A_ScreenWidth*0.40)/2, (A_ScreenHeight*1.50)/5, A_ScreenWidth*0.40, A_ScreenHeight-A_ScreenHeight/3
       }
-   ;----------------------------------------------------------- Open / Hide / Restore Program
-      ; openHideProgram(programName, programNameExe, programClass, programPath) 
-      ; {
-      ;    if FileExist(programPath) {
-      ;       Process, wait, %programNameExe%,1
-      ;       NewPID = %ErrorLevel%
-      ;       if NewPID = 0
-      ;       {
-      ;          Run, %programPath%
-      ;          WinWait, %programName%, ,5
-      ;          ; Sleep 100
-      ;          ; WinActive(%programName%)
-      ;          ; CenterWindow(%programName%)
-      ;          WinShow ahk_class %programClass% ahk_exe %programNameExe%
-      ;          SetTitleMatchMode,2
-      ;          DetectHiddenWindows, On
-      ;          IfWinExist, %programName%
-      ;          {
-      ;             WinGet, winid, ID, %programName%
-      ;             DllCall("SwitchToThisWindow", "UInt", winid, "UInt", 1)
-      ;             WinActivate, A
-      ;          }
-      ;       }
-      ;       else 
-      ;       {
-      ;          IfWinExist ahk_class %programClass% ahk_exe %programNameExe%
-      ;          {
-      ;             if WinActive(ahk_class %programClass%)
-      ;                WinHide
-      ;             else
-      ;             {
-      ;                WinShow ahk_class %programClass% ahk_exe %programNameExe%
-      ;                SetTitleMatchMode,2
-      ;                DetectHiddenWindows, On
-      ;                IfWinExist, %programName%
-      ;                {
-      ;                   WinGet, winid, ID, %programName%
-      ;                   DllCall("SwitchToThisWindow", "UInt", winid, "UInt", 1)
-      ;                   WinActivate, A
-      ;                }
-      ;             }
-      ;          }
-      ;          else 
-      ;          {
-      ;             WinShow ahk_class %programClass% ahk_exe %programNameExe%
-      ;             SetTitleMatchMode,2
-      ;             DetectHiddenWindows, On
-      ;             IfWinExist, %programName%
-      ;             {
-      ;                WinGet, winid, ID, %programName%
-      ;                DllCall("SwitchToThisWindow", "UInt", winid, "UInt", 1)
-      ;                WinActivate, A
-      ;             }
-      ;          }
-      ;       }
-      ;    }
-      ;    else {
-      ;       MsgBox There is not such file: %programPath%
-      ;    }
-      ; }
    ;----------------------------------------------------------- Open / Minimize / Restore Program
-      openMinimizeProgram(programName, programNameExe, programClass, programPath, specialProgram) 
+      openMinimizeProgram(programName, programNameExe, programClass, programPath, specialProgram, PID_ID) 
       {
-         if (programNameExe = "Explorer.exe")
-         {
+         if (programNameExe = "Explorer.exe") {
             WinGetTitle, Title, A
-            if (Title = programName)
-            {
+            if (Title = programName) {
                WinMinimize, A
-            }
-            else {
+            } else {
                folderFlag := false
                WinGet, id, list, , , Program Manager     
                Loop, %id%     
                {     
                   StringTrimRight,this_id, id%a_index%, 0     
                   WinGetTitle, this_title, ahk_id %this_id%
-                  if (this_title = programName)
-                  {    
+                  if (this_title = programName) {    
                      folderFlag := true
                      break     
                   }         
                }
-               if (folderFlag)
-               {
+               if (folderFlag) {
                   DllCall("SwitchToThisWindow", "UInt", this_id, "UInt", 1)
                   WinActivate, A
-               }
-               else 
-               {
+               } else {
                   Run ::{20d04fe0-3aea-1069-a2d8-08002b30309d}\%programPath%
                   GroupAdd, rogerExplorers, ahk_class %programClass%
                   Sleep 20
                   WinActive("File Explorer")
                }
             }
-         }
-         else 
-         {
-            if FileExist(programPath) {
-               Process, wait, %programNameExe%,1
-               NewPID = %ErrorLevel%
-               if NewPID = 0
-               {
-                  Run, %programPath%
-                  WinWait, %programName%, ,10
-                  WinShow ahk_class %programClass% ahk_exe %programNameExe%
-                  SetTitleMatchMode,2
-                  DetectHiddenWindows, On
-                  IfWinExist, %programName%
-                  {
+         } else if (programName = "WhatsApp") {
+            Process, Exist, WhatsApp.exe
+            {
+               If ! errorLevel
+                  if FileExist(programPath) {
+                     Run, %programPath%
+                     WinWait, %programName%, ,10
+                     SetTitleMatchMode,2
+                     DetectHiddenWindows, On
                      WinGet, winid, ID, %programName%
                      DllCall("SwitchToThisWindow", "UInt", winid, "UInt", 1)
                      WinActivate, A
-                     ; Sleep, 100
-                     ; WinMaximize, A
+                     WinGet, PID_ID, PID, A
+                     Return PID_ID
+                  } else {
+                     MsgBox There is not such file: %programPath%
+                     Return 0
                   }
-               }
-               else 
-               {
-                  IfWinExist ahk_class %programClass% ahk_exe %programNameExe%
+               else
+                  IfWinActive ahk_class %programClass% ahk_exe WhatsApp.exe
                   {
-                     if WinActive(ahk_class %programClass%)
-                     {
-                        if (specialProgram)
-                        {
-                           WinClose, ahk_class %programClass% ahk_exe %programNameExe%
-                        } 
-                        else
-                        {
-                           WinMinimize, A
-                        } 
-                     }
-                     else
-                     {
-                        if (specialProgram = true){
-                           Run, %programPath%
-                           WinWait, %programName%, ,10
-                        }
-                        else
-                        {
-                           WinShow ahk_class %programClass% ahk_exe %programNameExe%
-                           SetTitleMatchMode,2
-                           DetectHiddenWindows, On
-                           IfWinExist, %programName%
-                           {
-                              WinGet, winid, ID, %programName%
-                              DllCall("SwitchToThisWindow", "UInt", winid, "UInt", 1)
-                              WinActivate, A
-                              ; Sleep, 100
-                              ; WinMaximize, A
-                           }
-                        }
-                     }
-                  }
-                  else 
-                  {
-                     if (specialProgram = true){
-                        Run, %programPath%
-                        WinWait, %programName%, ,10
-                     }
-                     else
-                     {
-                        WinShow ahk_class %programClass% ahk_exe %programNameExe%
+                     if (!specialProgram) {
+                        WinMinimize, ahk_pid %PID_ID%
+                     }    
+                     Return 2
+                  } else {
+                     if (!specialProgram) {
                         SetTitleMatchMode,2
                         DetectHiddenWindows, On
-                        IfWinExist, %programName%
-                        {
-                           WinGet, winid, ID, %programName%
-                           DllCall("SwitchToThisWindow", "UInt", winid, "UInt", 1)
-                           WinActivate, A
-                           Sleep, 100
-                           WinMaximize, A
-                        }
+                        WinGet, winid, ID, WhatsApp.exe
+                        DllCall("SwitchToThisWindow", "UInt", winid, "UInt", 1)
+                        WinActivate, ahk_pid %PID_ID%
                      }
+                     Return 1
                   }
-               }
             }
-            else {
-               MsgBox There is not such file: %programPath%
-            }
-         }
-      }
-   ;----------------------------------------------------------- Window Minimize
-      ToggleWinMinimize(TheWindowTitle)
-      {
-         SetTitleMatchMode,2
-         DetectHiddenWindows, Off
-         IfWinActive, %TheWindowTitle%
-         {
-            WinMinimize, %TheWindowTitle%
-         }
-         Else
-         {
-            IfWinExist, %TheWindowTitle%
+         } else {
+            Process, Exist, %programNameExe%
             {
-               WinGet, winid, ID, %TheWindowTitle%
-               DllCall("SwitchToThisWindow", "UInt", winid, "UInt", 1)
-               WinActivate, %TheWindowTitle%
+               If ! errorLevel
+                  if FileExist(programPath) {
+                     Run, %programPath%
+                     WinWait, %programName%, ,10
+                     SetTitleMatchMode,2
+                     DetectHiddenWindows, On
+                     WinGet, winid, ID, %programName%
+                     DllCall("SwitchToThisWindow", "UInt", winid, "UInt", 1)
+                     WinActivate, A
+                     WinGet, PID_ID, PID, A
+                     Return PID_ID
+                  } else {
+                     MsgBox There is not such file: %programPath%
+                     Return 0
+                  }
+               else
+                  IfWinActive ahk_class %programClass% ahk_exe %programNameExe%
+                  {
+                     if (!specialProgram) {
+                        WinMinimize, ahk_pid %PID_ID%
+                     }    
+                     Return 2
+                  } else {
+                     if (!specialProgram) {
+                        SetTitleMatchMode,2
+                        DetectHiddenWindows, On
+                        WinGet, winid, ID, %programName%
+                        DllCall("SwitchToThisWindow", "UInt", winid, "UInt", 1)
+                        WinActivate, ahk_pid %PID_ID%
+                     }
+                     Return 1
+                  }
             }
          }
-         Return
       }
    ;----------------------------------------------------------- Close Task
       closeTask()
@@ -318,7 +218,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
          {
             if WinActive("ahk_exe " + element) 
             {
-               return
+               Return
             }
          }
          if programFlag = 1 
@@ -370,10 +270,11 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
             ; sleep 2000
             ; tooltip
             SendEvent {click %FoundX%,%Foundy%}
-            MouseMove, wid/2,hei/2
+            MouseMove, wid/2,hei/2, 100
             return true
          }
       }
+
 ;===================================================================================;
 ;                      _    _    _    __   _                __                      ;
 ;                     |_)  |_)  / \  /__  |_)   /\   |\/|  (_                       ;
@@ -445,7 +346,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
                vmax := 1
                MouseClick %A_ThisHotkey%
             }
-            return
+            Return
 
          Quit:
             QuickToolTip("Exiting Accelerated Scrolling...", 1000)
@@ -455,12 +356,12 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
          QuickToolTip(text, delay) {
             ToolTip, %text%
             SetTimer ToolTipOff, %delay%
-            return
+            Return
 
             ToolTipOff:
             SetTimer ToolTipOff, Off
             ToolTip
-            return
+            Return
          }
       ;Alt + B -------------------------------- Camera Blur 6%
          !b::
@@ -469,7 +370,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
       ;Alt + C -------------------------------- Split Clip
          !c::
             Send ^{k}
-         return
+         Return
       ;Alt + D -------------------------------- Delete Clip
          !d::
             Send {d}
@@ -591,6 +492,16 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
             !b::
                Send ^{b}
             Return
+         ;Alt + F -------------------------------- Find / Find and Replace in Folder 
+            !f::
+               ; imageName = Sublime-Search-001
+               ; statusSearch := SearchImage(imageName,0,720,0,0)
+               ; if (statusSearch = true) {
+               ;    Send {ESC}
+               ; } else if (statusSearch = false) {
+                  Send ^+{f}
+               ; }
+            Return
          ;Alt + G -------------------------------- Go to Line
             !g::
                Send ^{g}
@@ -627,6 +538,16 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
             !WheelDown::
                tabRight()
             Return
+         ;Ctrl + F ------------------------------- Find
+            ^f::
+               ; imageName = Sublime-Search-002
+               ; statusSearch := SearchImage(imageName,0,720,0,0)
+               ; if (statusSearch = true) {
+               ;    Send {ESC}
+               ; } else if (statusSearch = false) {
+                  Send ^{f}
+               ; }
+            Return
          ;Ctrl + T ------------------------------- New File
             ^t::
                Send ^{n}
@@ -654,11 +575,11 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
                } else if (statusSearch = false) {
                   Send ^+{f}
                }
-            return
+            Return
          ;Alt + G -------------------------------- Go to Line
             !g::
                Send ^{g}
-            return
+            Return
          ;Alt + H -------------------------------- Find and Replace Local
             !h::
                imageName = VS-Code-Search-001
@@ -681,7 +602,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
                   SplashTextOff
                   Reload
                }
-            return
+            Return
          ;Alt + T -------------------------------- New File
             !t::
                Send ^{n}
@@ -719,6 +640,10 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
                } else if (statusSearch = false) {
                   Send ^+{e}
                }
+            Return
+         ;Ctrl + T ------------------------------- New File
+            ^t::
+               Send ^{n}
             Return
       #IfWinActive
    ;----------------------------------------------------------- WhatsApp
@@ -791,7 +716,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
          ; ; sleep 1000
          ; ; WinRestore, ahk_id %id%
          WinMinimize, A
-      return
+      Return
    ;Alt + E --------------------------------------------------- Alt Tab File Explorer
       !e::
          IfWinNotExist, ahk_class CabinetWClass 
@@ -818,7 +743,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
          for process in ComObjGet("winmgmts:").ExecQuery("Select * from Win32_Process")
              LV_Add("", process.Name, process.CommandLine)
          Gui, Show,, Process List
-      return
+      Return
    ;Alt + P --------------------------------------------------- Get Process Path
       !p::
          PID = 0
@@ -832,7 +757,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
                                     , "Str", FilePath, "UInt", PathLength)
          DllCall("CloseHandle", "UInt", hProcess)
          MsgBox, %FilePath%
-      return
+      Return
    ;Alt + Q --------------------------------------------------- Close Program - Task
       !q::				
          if WinActive("ahk_exe Adobe Premiere Pro.exe") {
@@ -840,7 +765,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
          else {												
             closeTask()
          }
-      return
+      Return
    ;Alt + R --------------------------------------------------- Reload 
       !r:: 
          ;MsgBox, Reloaded
@@ -853,7 +778,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
    ;Alt + W --------------------------------------------------- Close Window
       !w::
            closeTabOrWindow()
-      return
+      Return
    ;Shift + Numpad - ------------------------------------------ Volume Up
       +NumpadAdd::
          SoundSet, +2
@@ -865,7 +790,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
    ;Shift + Numpad * ------------------------------------------ Volume Mute
       +NumpadMult::
          send {Volume_Mute}
-      return
+      Return
    ;Shift + WheelUp ------------------------------------------- Volume Up
       +WheelUp::
          SoundSet, +4
@@ -884,72 +809,126 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ;               |_)  | |  |\ |    |_)  |_)  / \  /__  |_)   /\   |\/|               ;
 ;               | \  |_|  | \|    |    | \  \_/  \_|  | \  /--\  |  |               ;
 ;===================================================================================;
+   ;Win + 0 --------------------------------------------------- Window Resize 50%x50%% Screen Size
+      #Numpad0::
+         CenterWindow()
+      Return
    ;Win + C --------------------------------------------------- Run Chrome
       ; #c::
       ;    programName    := "Google Chrome"
       ;    programNameExe := "chrome.exe"
       ;    programClass   := "Chrome_WidgetWin_1"
       ;    programPath     =  C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Google Chrome.lnk
-      ;    openMinimizeProgram(programName, programNameExe, programClass, programPath, false)
-      ; return
+      ;    if (programs_PID[programNameExe] = "") {
+      ;       WinGet, PID_ID, PID, ahk_exe %programNameExe%
+      ;       programs_PID[programName] := PID_ID
+      ;    }
+      ;    status_program := openMinimizeProgram(programName, programNameExe, programClass, programPath, false, programs_PID[programName])
+      ;    if (status_program = 0) {        ; Error
+      ;    } else if (status_program = 1) { ; Maximize
+      ;    } else if (status_program = 2) { ; Minimize
+      ;    } else {                         ; Open program
+      ;       programs_PID[programName] := status_program
+      ;    }
+      ; Return
    ;Win + C --------------------------------------------------- GitHub Folder
       #c::
          programName    := "Codes"
          programNameExe := "Explorer.exe"
          programClass   := "CabinetWClass"
          programPath     =  D:\Codes
-         openMinimizeProgram(programName, programNameExe, programClass, programPath, false)
-      return
+         if (programs_PID[programNameExe] = "") {
+            WinGet, PID_ID, PID, ahk_exe %programNameExe%
+            programs_PID[programName] := PID_ID
+         }
+         status_program := openMinimizeProgram(programName, programNameExe, programClass, programPath, false, programs_PID[programName])
+         if (status_program = 0) {        ; Error
+         } else if (status_program = 1) { ; Maximize
+         } else if (status_program = 2) { ; Minimize
+         } else {                         ; Open program
+            programs_PID[programName] := status_program
+         }
+      Return
    ;Win + D --------------------------------------------------- Open Downloads Folder
       #d::
          programName    := "Downloads"
          programNameExe := "Explorer.exe"
          programClass   := "CabinetWClass"
          programPath     =  C:\Users\%A_Username%\Downloads
-         openMinimizeProgram(programName, programNameExe, programClass, programPath, false)
-      return
+         if (programs_PID[programNameExe] = "") {
+            WinGet, PID_ID, PID, ahk_exe %programNameExe%
+            programs_PID[programName] := PID_ID
+         }
+         status_program := openMinimizeProgram(programName, programNameExe, programClass, programPath, false, programs_PID[programName])
+         if (status_program = 0) {        ; Error
+         } else if (status_program = 1) { ; Maximize
+         } else if (status_program = 2) { ; Minimize
+         } else {                         ; Open program
+            programs_PID[programName] := status_program
+         }
+      Return
    ;Win + E --------------------------------------------------- Open File Explorer Group
       #e::
-            Run, explorer.exe
-            GroupAdd, rogerExplorers, ahk_class CabinetWClass
-            Sleep 50
-            WinActive("File Explorer")
+         Run, explorer.exe
+         GroupAdd, rogerExplorers, ahk_class CabinetWClass
+         Sleep 50
+         WinActive("File Explorer")
       Return
-   ;Win + Q --------------------------------------------------- Close Program - Task
-      #q::																	
-         closeTask()
-      return
    ;Win + S --------------------------------------------------- Run Sublime
       #s::
          programName := "Sublime Text"
          programNameExe := "sublime_text.exe"
          programClass := "PX_WINDOW_CLASS"
-         programPath = C:\Roger-That\Programs\Sublime Text 3 Portable\Sublime Text Build 3207\sublime_text.exe
-         openMinimizeProgram(programName, programNameExe, programClass, programPath, false)
+         programPath = C:\Roger-That\Programs\Sublime Text 3 Portable\Sublime Text\sublime_text.exe
+         if (programs_PID[programNameExe] = "") {
+            WinGet, PID_ID, PID, ahk_exe %programNameExe%
+            programs_PID[programName] := PID_ID
+         }
+         status_program := openMinimizeProgram(programName, programNameExe, programClass, programPath, false, programs_PID[programName])
+         if (status_program = 0) {        ; Error
+         } else if (status_program = 1) { ; Maximize
+         } else if (status_program = 2) { ; Minimize
+         } else {                         ; Open program
+            programs_PID[programName] := status_program
+         }
       Return
-   ;Win + S---------------------------------------------------- Run Skype - Commented Out
-      ; #n::
-      ;    programName    := "Skype"
-      ;    programNameExe := "Skype.exe"
-      ;    programClass   := "Chrome_WidgetWin_1"
-      ;    programPath     =  C:\Program Files (x86)\Microsoft\Skype for Desktop\Skype.exe
-      ;    openMinimizeProgram(programName, programNameExe, programClass, programPath, true)
-      ; Return
    ;Win + T --------------------------------------------------- Run Telegram
       #t::
          programName    := "Telegram"
          programNameExe := "Telegram.exe"
          programClass   := "Qt5QWindowIcon"
          programPath     =  C:\Users\%A_Username%\AppData\Roaming\Telegram Desktop\Telegram.exe
-         openMinimizeProgram(programName, programNameExe, programClass, programPath, true)
-      return
+         if (programs_PID[programNameExe] = "") {
+            WinGet, PID_ID, PID, ahk_exe %programNameExe%
+            programs_PID[programName] := PID_ID
+         }
+         status_program := openMinimizeProgram(programName, programNameExe, programClass, programPath, false, programs_PID[programName])
+         if (status_program = 0) {        ; Error
+         } else if (status_program = 1) { ; Maximize
+            Run, %programPath%
+         } else if (status_program = 2) { ; Minimize
+            WinClose, ahk_class %programClass% ahk_exe %programNameExe%
+         } else {                         ; Open program
+            programs_PID[programName] := status_program
+         }
+      Return
    ;Win + V --------------------------------------------------- Run Visio Studio Code - Commented Out
       #v::
          programName    := "Visual Studio Code"
          programNameExe := "Code.exe"
          programClass   := "Chrome_WidgetWin_1"
          programPath     =  C:\Users\%A_Username%\AppData\Local\Programs\Microsoft VS Code\Code.exe
-         openMinimizeProgram(programName, programNameExe, programClass, programPath, false)
+         if (programs_PID[programNameExe] = "") {
+            WinGet, PID_ID, PID, ahk_exe %programNameExe%
+            programs_PID[programName] := PID_ID
+         }
+         status_program := openMinimizeProgram(programName, programNameExe, programClass, programPath, false, programs_PID[programName])
+         if (status_program = 0) {        ; Error
+         } else if (status_program = 1) { ; Maximize
+         } else if (status_program = 2) { ; Minimize
+         } else {                         ; Open program
+            programs_PID[programName] := status_program
+         }
       Return
    ;Win + X --------------------------------------------------- Open Downloads Folder
       #x::
@@ -957,20 +936,46 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
          programNameExe := "Explorer.exe"
          programClass   := "CabinetWClass"
          programPath     =  D:\Roger-That
-         openMinimizeProgram(programName, programNameExe, programClass, programPath, false)
-      return
+         if (programs_PID[programNameExe] = "") {
+            WinGet, PID_ID, PID, ahk_exe %programNameExe%
+            programs_PID[programName] := PID_ID
+         }
+         status_program := openMinimizeProgram(programName, programNameExe, programClass, programPath, false, programs_PID[programName])
+         if (status_program = 0) {        ; Error
+         } else if (status_program = 1) { ; Maximize
+         } else if (status_program = 2) { ; Minimize
+         } else {                         ; Open program
+            programs_PID[programName] := status_program
+         }
+      Return
    ;Win + W --------------------------------------------------- Run WhatsApp
-      ; #w::
-      ;    programName    := "WhatsApp"
-      ;    programNameExe := "WhatsappTray.exe"
-      ;    programClass   := "Chrome_WidgetWin_1"
-      ;    programPath     =  C:\Program Files (x86)\WhatsappTray\WhatsappTray.exe
-      ;    openMinimizeProgram(programName, programNameExe, programClass, programPath, true)
-      ; return
-   ;Win + W --------------------------------------------------- Close Program - Task
-      #w::																	
-         closeTask()
-      return
+      #w::
+         programName    := "WhatsApp"
+         programNameExe := "WhatsappTray.exe"
+         programClass   := "Chrome_WidgetWin_1"
+         programPath     =  C:\Program Files (x86)\WhatsappTray\WhatsappTray.exe
+         if (programs_PID[programNameExe] = "") {
+            WinGet, PID_ID, PID, ahk_exe %programNameExe%
+            programs_PID[programName] := PID_ID
+         }
+         status_program := openMinimizeProgram(programName, programNameExe, programClass, programPath, true, programs_PID[programName])
+         if (status_program = 0) {        ; Error
+         } else if (status_program = 1) { ; Maximize
+            ; Run, %programPath%
+            SetTitleMatchMode,2
+            DetectHiddenWindows, On
+            WinGet, winid, ID, %programName%
+            DllCall("SwitchToThisWindow", "UInt", winid, "UInt", 1)
+            WinActivate, A
+            MouseMove, A_ScreenWidth/2, A_ScreenHeight/2, 100
+         } else if (status_program = 2) { ; Minimize
+            imageName = Whatsapp-001
+            WinGetActiveStats, Title, Width, Height, X, Y
+            statusSearch := SearchImageClick(imageName,Width - 150,0,Width,70, Width, Height)
+         } else {                         ; Open program
+            programs_PID[programName] := status_program
+         }
+      Return
 
 ;===================================================================================;
 ;       _   _                _        ___   _   _      _   _    _    _   __         ;
@@ -981,7 +986,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
       ; #InstallKeybdHook
       ; ^!t::
       ; 	KeyHistory
-      ; return
+      ; Return
    ;Right Ctrl ------------------------------------------------ Double Pressed
       ; ~RControl::
       ;    if (A_PriorHotkey != "~RControl" or A_TimeSincePriorHotkey > 400) {
@@ -997,14 +1002,14 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
             ; WinGetActiveStats, Title, Width, Height, X, Y
             ; MsgBox, The active window "%Title%" is %Width% wide`, %Height% tall`, and positioned at %X%`,%Y%.
          ;---------------------------------------------- Mouse Move x1,y1 - x2,y2
-            WinGetActiveStats, Title, Width, Height, X, Y
-            x1 := 0
-            y1 := 0
-            x2 := 300
-            y2 := 80
-            MouseMove, x1,y1
-            Sleep, 1000
-            MouseMove, x2,y2
+            ; WinGetActiveStats, Title, Width, Height, X, Y
+            ; x1 := 0
+            ; y1 := 0
+            ; x2 := 300
+            ; y2 := 80
+            ; MouseMove, x1,y1
+            ; Sleep, 1000
+            ; MouseMove, x2,y2
             ; MsgBox, "position" %x1% "x" %Y% " - " %Width% "x" %y2%
          ;---------------------------------------------- Get Book Online
             ; Loop, 540
@@ -1048,4 +1053,11 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
             ;     winclose,%this_title%
             ;   }
             ; }
-      return
+         ;---------------------------------------------- Window Hide - Window Show
+            programName    := "WhatsApp"
+            programNameExe := "WhatsappTray.exe"
+            programClass   := "Chrome_WidgetWin_1"
+            WinHide ahk_class %programClass% ;ahk_exe %programNameExe%
+            Sleep, 3000
+            WinShow ahk_class %programClass% ;ahk_exe %programNameExe%
+      Return
