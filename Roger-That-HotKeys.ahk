@@ -53,7 +53,7 @@ programs_PID := {}
          SetKeyDelay, 0
          MouseGetPos, xpos, ypos
          ControlGetPos, X, Y, Width, Height, Edit1, ahk_class Premiere Pro
-         MouseMove, X-25, Y+611, 0
+         MouseMove, X-25, Y+595, 0
          sleep 10
          MouseClick, left, , , 1
          sleep 10
@@ -64,6 +64,7 @@ programs_PID := {}
          MouseMove, 30, 45, 0 , R
          MouseClickDrag, left, , , %xpos%, %ypos%, 0
          BlockInput, off
+         Send {Alt Up}
       }
    ;----------------------------------------------------------- Tab
       tabLeft()
@@ -380,13 +381,13 @@ programs_PID := {}
          !r::
             Send ^{r}
          Return
-      ;Alt + S -------------------------------- Video Size 71%
+      ;Alt + S -------------------------------- Photo Size 48% Zoom
          !s::
-            effects("Video Size 71%")
-         Return
-      ;Alt + P -------------------------------- Photo Size 48% Zoom
-         !p::
             effects("Photo Size 48% Zoom")
+         Return
+      ;Alt + V -------------------------------- Video Size 71%
+         !v::
+            effects("Video Size 71%")
          Return
       #IfWinActive
    ;----------------------------------------------------------- Spyder Phyton
@@ -455,25 +456,25 @@ programs_PID := {}
             !1::
                SetTimer detect_key_released, 50
                ControlFocus, DirectUIHWND3, A
-               Send ^!{5}
+               Send ^+{5}
             Return
          ;Alt + 2 -------------------------------- File Explorer View as List + Size
             !2::
                SetTimer detect_key_released, 50
                ControlFocus, DirectUIHWND3, A
-               Send ^!{6}
+               Send ^+{6}
             Return
          ;Alt + 3 -------------------------------- File Explorer View as Folder
             !3::
                SetTimer detect_key_released, 50
                ControlFocus, DirectUIHWND3, A
-               Send ^!{2}
+               Send ^+{2}
             Return
          ;Alt + 4 -------------------------------- File Explorer View as Large Files
             !4::
                SetTimer detect_key_released, 50
                ControlFocus, DirectUIHWND3, A
-               Send ^!{1}
+               Send ^+{1}
             Return
          ;---------------------------------------- Detect if Alt Key was released
             detect_key_released:
