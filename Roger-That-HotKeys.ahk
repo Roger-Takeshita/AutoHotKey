@@ -234,44 +234,64 @@ programs_PID := {}
    ;----------------------------------------------------------- Custom Image True/False/doNothing
       SearchImage(imageName,x1,y1,x2,y2)
       {
-         ImageSearch, FoundX, FoundY, %x1%, %y1%, %x2%, %y2%, %A_WorkingDir%\Images\%imageName%.bmp
+         CoordMode, Pixel, Mouse
+         CoordMode, ToolTip
+         ImageSearch, FoundX, FoundY, %x1%, %y1%, %x2%, %y2%, *75 %A_WorkingDir%\Images\%imageName%.bmp
          if ErrorLevel = 2
          {
-            MsgBox Your image either doesn't exist or isn't in this location.
+            msg = Your image either doesn't exist or isn't in this location.
+            tooltip %msg%
+            sleep 3000
+            tooltip
             return "doNothing"
          }
          else if ErrorLevel = 1
          {
+            ; msg = Image not found, check your coordinates x1,y1 (%x1%,%y1%) and x2,y2 (%x2%,%y2%).
+            ; tooltip %msg%
+            ; sleep 3000
+            ; tooltip
             return false
          }
          else
          {
-            ; tooltip Found! Location %FoundX%x%FoundY%.
+            ; msg = Found! Location %FoundX%x%FoundY%.
+            ; tooltip %msg%
             ; sleep 2000
             ; tooltip
             return true
          }
       }
    ;----------------------------------------------------------- Custom Image Click True/False/doNothing
-      SearchImageClick(imageName,x1,y1,x2,y2,wid,hei)
+      SearchImageClick(imageName,x1,y1,x2,y2)
       {
-         ImageSearch, FoundX, FoundY, %x1%, %y1%, %x2%, %y2%, %A_WorkingDir%\Images\%imageName%.bmp
+         CoordMode, Pixel, Mouse
+         CoordMode, ToolTip
+         ImageSearch, FoundX, FoundY, %x1%, %y1%, %x2%, %y2%, *75 %A_WorkingDir%\Images\%imageName%.bmp
          if ErrorLevel = 2
          {
-            MsgBox Your image either doesn't exist or isn't in this location.
+            msg = Your image either doesn't exist or isn't in this location.
+            tooltip %msg%
+            sleep 5000
+            tooltip
             return "doNothing"
          }
          else if ErrorLevel = 1
          {
+            ; msg = Image not found, check your coordinates x1,y1 (%x1%,%y1%) and x2,y2 (%x2%,%y2%).
+            ; tooltip %msg%
+            ; sleep 5000
+            ; tooltip
             return false
          }
          else
          {
-            ; tooltip Found! Location %FoundX%x%FoundY%.
+            ; msg = Found! Location %FoundX%x%FoundY%.
+            ; tooltip %msg%
             ; sleep 2000
             ; tooltip
-            SendEvent {click %FoundX%,%Foundy%}
-            MouseMove, wid/2,hei/2, 100
+            SendEvent {click %FoundX%, %Foundy%, Left}
+            DllCall("SetCursorPos", "int", A_ScreenWidth/2, "int", A_ScreenHeight/2)
             return true
          }
       }
@@ -283,109 +303,109 @@ programs_PID := {}
 ;===================================================================================;
    ;----------------------------------------------------------- Adobe Premiere
       #IfWinActive ahk_exe Adobe Premiere Pro.exe
-      ;---------------------------------------- Scroll Speed
-         #NoEnv
-         #SingleInstance
-         #MaxHotkeysPerInterval 120
-         Process, Priority, , H
-         SendMode Input
-         #SingleInstance force
+         ;---------------------------------------- Scroll Speed
+            #NoEnv
+            #SingleInstance
+            #MaxHotkeysPerInterval 120
+            Process, Priority, , H
+            SendMode Input
+            #SingleInstance force
 
-         ; Show scroll velocity as a tooltip while scrolling. 1 or 0.
-         tooltips := 0
+            ; Show scroll velocity as a tooltip while scrolling. 1 or 0.
+            tooltips := 0
 
-         ; The length of a scrolling session.
-         ; Keep scrolling within this time to accumulate boost.
-         ; Default: 500. Recommended between 400 and 1000.
-         timeout := 600
+            ; The length of a scrolling session.
+            ; Keep scrolling within this time to accumulate boost.
+            ; Default: 500. Recommended between 400 and 1000.
+            timeout := 600
 
-         ; If you scroll a long distance in one session, apply additional boost factor.
-         ; The higher the value, the longer it takes to activate, and the slower it accumulates.
-         ; Set to zero to disable completely. Default: 30.
-         boost := 60
+            ; If you scroll a long distance in one session, apply additional boost factor.
+            ; The higher the value, the longer it takes to activate, and the slower it accumulates.
+            ; Set to zero to disable completely. Default: 30.
+            boost := 60
 
-         ; Spamming applications with hundreds of individual scroll events can slow them down.
-         ; This sets the maximum number of scrolls sent per click, i.e. max velocity. Default: 60.
-         limit := 60
+            ; Spamming applications with hundreds of individual scroll events can slow them down.
+            ; This sets the maximum number of scrolls sent per click, i.e. max velocity. Default: 60.
+            limit := 60
 
-         ; Runtime variables. Do not modify.
-         distance := 0
-         vmax := 1
+            ; Runtime variables. Do not modify.
+            distance := 0
+            vmax := 1
 
-         ; Key bindings
-         WheelUp::    Goto Scroll
-         WheelDown::  Goto Scroll
-         #WheelUp::   Suspend
-         #WheelDown:: Goto Quit
+            ; Key bindings
+            WheelUp::    Goto Scroll
+            WheelDown::  Goto Scroll
+            #WheelUp::   Suspend
+            #WheelDown:: Goto Quit
 
-         Scroll:
-            t := A_TimeSincePriorHotkey
-            if (A_PriorHotkey = A_ThisHotkey && t < timeout) {
-               ; Remember how many times we've scrolled in the current direction
-               distance++
-               ; Calculate acceleration factor using a 1/x curve
-               v := (t < 80 && t > 1) ? (250.0 / t) - 1 : 1
-               ; Apply boost
-               if (boost > 1 && distance > boost) {
-                  ; Hold onto the highest speed we've achieved during this boost
-                  if (v > vmax)
-                     vmax := v
-                  else
-                     v := vmax
+            Scroll:
+               t := A_TimeSincePriorHotkey
+               if (A_PriorHotkey = A_ThisHotkey && t < timeout) {
+                  ; Remember how many times we've scrolled in the current direction
+                  distance++
+                  ; Calculate acceleration factor using a 1/x curve
+                  v := (t < 80 && t > 1) ? (250.0 / t) - 1 : 1
+                  ; Apply boost
+                  if (boost > 1 && distance > boost) {
+                     ; Hold onto the highest speed we've achieved during this boost
+                     if (v > vmax)
+                        vmax := v
+                     else
+                        v := vmax
 
-                  v *= distance / boost
+                     v *= distance / boost
+                  }
+                  ; Validate
+                  v := (v > 1) ? ((v > limit) ? limit : Floor(v)) : 1
+                  if (v > 1 && tooltips)
+                     QuickToolTip("×"v, timeout)
+                  MouseClick, %A_ThisHotkey%, , , v
                }
-               ; Validate
-               v := (v > 1) ? ((v > limit) ? limit : Floor(v)) : 1
-               if (v > 1 && tooltips)
-                  QuickToolTip("×"v, timeout)
-               MouseClick, %A_ThisHotkey%, , , v
+               else {
+                  ; Combo broken, so reset session variables
+                  distance := 0
+                  vmax := 1
+                  MouseClick %A_ThisHotkey%
+               }
+               Return
+
+            Quit:
+               QuickToolTip("Exiting Accelerated Scrolling...", 1000)
+               Sleep 1000
+               ExitApp
+
+            QuickToolTip(text, delay) {
+               ToolTip, %text%
+               SetTimer ToolTipOff, %delay%
+               Return
+
+               ToolTipOff:
+               SetTimer ToolTipOff, Off
+               ToolTip
+               Return
             }
-            else {
-               ; Combo broken, so reset session variables
-               distance := 0
-               vmax := 1
-               MouseClick %A_ThisHotkey%
-            }
+         ;Alt + B -------------------------------- Camera Blur 6%
+            !b::
+               effects("Camera Blur 6%")
             Return
-
-         Quit:
-            QuickToolTip("Exiting Accelerated Scrolling...", 1000)
-            Sleep 1000
-            ExitApp
-
-         QuickToolTip(text, delay) {
-            ToolTip, %text%
-            SetTimer ToolTipOff, %delay%
+         ;Alt + C -------------------------------- Split Clip
+            !c::
+               Send ^{k}
             Return
-
-            ToolTipOff:
-            SetTimer ToolTipOff, Off
-            ToolTip
+         ;Alt + D -------------------------------- Delete Clip
+            !d::
+               Send {d}
+               Send !{Backspace}
             Return
-         }
-      ;Alt + B -------------------------------- Camera Blur 6%
-         !b::
-            effects("Camera Blur 6%")
-         Return
-      ;Alt + C -------------------------------- Split Clip
-         !c::
-            Send ^{k}
-         Return
-      ;Alt + D -------------------------------- Delete Clip
-         !d::
-            Send {d}
-            Send !{Backspace}
-         Return
-      ;Alt + R -------------------------------- Speed/Duration
-         !r::
-            Send ^{r}
-         Return
-      ;Alt + S -------------------------------- Photo Size 48% Zoom
-         !s::
-            effects("Photo Size 48% Zoom")
-         Return
-      ;Alt + V -------------------------------- Video Size 71%
+         ;Alt + R -------------------------------- Speed/Duration
+            !r::
+               Send ^{r}
+            Return
+         ;Alt + S -------------------------------- Photo Size 48% Zoom
+            !s::
+               effects("Photo Size 48% Zoom")
+            Return
+         ;Alt + V -------------------------------- Video Size 71%
          !v::
             effects("Video Size 71%")
          Return
@@ -595,7 +615,7 @@ programs_PID := {}
             !r::
                imageName = VS-Code-Run-Terminal-002
                WinGetActiveStats, Title, Width, Height, X, Y
-               statusSearch := SearchImageClick(imageName,Width - 300,0,Width,70, Width, Height)
+               statusSearch := SearchImageClick(imageName,Width - 300,0,Width,70)
                if (statusSearch = false) {
                   SplashTextOn, [ Width, Height, Title, Text]
                   SplashTextOn,500,200,AutoHotKey,Roger-That's Hotkey's been reloaded.
@@ -972,7 +992,7 @@ programs_PID := {}
          } else if (status_program = 2) { ; Minimize
             imageName = Whatsapp-001
             WinGetActiveStats, Title, Width, Height, X, Y
-            statusSearch := SearchImageClick(imageName,Width - 150,0,Width,70, Width, Height)
+            statusSearch := SearchImageClick(imageName,Width - 300,0,Width,30)
          } else {                         ; Open program
             programs_PID[programName] := status_program
          }
@@ -1055,10 +1075,12 @@ programs_PID := {}
             ;   }
             ; }
          ;---------------------------------------------- Window Hide - Window Show
-            programName    := "WhatsApp"
-            programNameExe := "WhatsappTray.exe"
-            programClass   := "Chrome_WidgetWin_1"
-            WinHide ahk_class %programClass% ;ahk_exe %programNameExe%
-            Sleep, 3000
-            WinShow ahk_class %programClass% ;ahk_exe %programNameExe%
+            ; programName    := "WhatsApp"
+            ; programNameExe := "WhatsappTray.exe"
+            ; programClass   := "Chrome_WidgetWin_1"
+            ; WinHide ahk_class %programClass% ;ahk_exe %programNameExe%
+            ; Sleep, 3000
+            ; WinShow ahk_class %programClass% ;ahk_exe %programNameExe%
+
+            MouseMove,A_ScreenWidth/2, A_ScreenHeight/2, 100
       Return
