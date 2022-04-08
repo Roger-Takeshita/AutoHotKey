@@ -156,7 +156,7 @@ programs_PID := {}
             programsArray := ["BCompare.exe", "sublime_text.exe", "chrome.exe", "iexplore.exe", "pythonw.exe", "Code.exe"]
             exceptionsArray := ["Adobe Premiere Pro.exe"]
 
-            for (index, element in programsArray) {
+            for index, element in programsArray {
                 if WinActive("ahk_exe " + element)
                 {
                 ; MsgBox % "Element number " . index . " is " . element
@@ -164,7 +164,7 @@ programs_PID := {}
                 }
             }
 
-            for (index, element in exceptionsArray) {
+            for index, element in exceptionsArray {
                 if WinActive("ahk_exe " + element) {
                     Return
                 }
@@ -332,14 +332,14 @@ programs_PID := {}
         #IfWinActive ahk_exe Code.exe
             program := "ahk_exe Code.exe"
 
-            ; Win + B -------------------------------- Explorer
+            ; Win + B -------------------------------- Toggle Explorer
                 #b::
                     Send ^{b}
                 Return
 
-            ; Win + F -------------------------------- Find
-                #f::
-                    Send ^{f}
+            ; Win + D -------------------------------- Select Word
+                #d::
+                    Send ^{d}
                 Return
 
             ; Win + G -------------------------------- Go to Line
@@ -352,24 +352,78 @@ programs_PID := {}
                     Send ^{h}
                 return
 
+            ; Win + J -------------------------------- Toggle Terminal
+                #j::
+                    Send ^{j}
+                return
+
+            ; Win + L -------------------------------- Select Line
+                #l::
+                    Send ^{l}
+                return
+
+            ; Win + P -------------------------------- Files
+                #p::
+                    Send ^{p}
+                Return
             ; Win + R -------------------------------- Run File
                 #r::
                     Send ^{r}
                 Return
 
+            ; Win + S -------------------------------- Save File
+                #s::
+                    Send ^{s}
+                Return
+
             ; Win + T -------------------------------- New File
                 #t::
-                    Send ^{t}
+                    Send ^{n}
+                Return
+
+            ; Win + Z -------------------------------- Undo
+                #z::
+                    Send ^{z}
+                Return
+
+            ; Win + \ -------------------------------- Split Window
+                #\::
+                    Send ^{\}
+                Return
+
+            ; Win + Enter ---------------------------- New Line Below
+                #Enter::
+                    Send ^{Enter}
+                Return
+
+            ; Win + Shift + Enter -------------------- New Line Above
+                #+Enter::
+                    Send ^+{Enter}
+                Return
+
+            ; Win + Shift + K ------------------------ Delete Line
+                #+k::
+                    Send ^+{k}
+                return
+
+            ; Win + Shift + P ------------------------ Settings
+                #+p::
+                    Send ^+{p}
+                Return
+
+            ; Win + Shift + Z ------------------------ Redo
+                #+z::
+                    Send ^+{z}
                 Return
 
             ; Win + Alt + Left ----------------------- Previous Tab
                 #!Left::
-                    tabLeft()
+                    Send ^!{Left}
                 Return
 
             ; Win + Alt + Right ---------------------- Forward Tab
                 #!Right::
-                    tabRight()
+                    Send ^!{Right}
                 Return
 
             ; Win + Alt + Mouse Wheel ---------------- Mouse Wheel
@@ -395,9 +449,45 @@ programs_PID := {}
 ;=                          |  __|--| \ ||--|__/ /__\ |                             ;
 ;=                           \__/|__|  \||__|  \/    \|__                           ;
 ;===================================================================================;
+    ; Win + A -------------------------------- Select All
+        #a::
+            Send ^{a}
+        Return
+
+    ; Win + C -------------------------------- Copy
+        #c::
+            Send ^{c}
+        Return
+
+    ; Win + F -------------------------------- Find
+        #f::
+            Send ^{f}
+        Return
+
+    ; Win + V -------------------------------- Paste
+        #v::
+            Send ^{v}
+        Return
+
+    ; Win + X -------------------------------- Cut
+        #x::
+            Send ^{x}
+        Return
+
+    ; Win + Tab ------------------------------ Alt + Tab
+        #Tab::
+            Send !{Tab}
+        Return
+
+    ; Win + Shift + Tab ---------------------- Alt + Shift + Tab
+        #+Tab::
+            Send !+{Tab}
+        Return
+
     ; Alt + E --------------------------------------------------- Alt Tab File Explorer
         !e::
-            IfWinNotExist, ahk_class CabinetWClass {
+            IfWinNotExist, ahk_class CabinetWClass
+            {
                 Run ::{20d04fe0-3aea-1069-a2d8-08002b30309d}
                 GroupAdd, rogerExplorers, ahk_class CabinetWClass
                 WinActive("File Explorer")
