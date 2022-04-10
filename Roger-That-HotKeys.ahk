@@ -332,100 +332,46 @@ programs_PID := {}
         #IfWinActive ahk_exe Code.exe
             program := "ahk_exe Code.exe"
 
-            ; Win + B -------------------------------- Toggle Explorer
-                #b::
-                    Send ^{b}
-                Return
+            #!Down::Send, ^!+{Down}
+            #!Up::Send, ^!+{Up}
+            #!Left::Send, ^!{Left}
+            #!Right::Send, ^!{Right}
 
-            ; Win + D -------------------------------- Select Word
-                #d::
-                    Send ^{d}
-                Return
+            #+0::Send, ^!{0}
+            #-::Send, ^{-}
+            #+-::Send, ^+{-}
+            #=::Send, ^{=}
+            #+=::Send, ^+{=}
+            #+[::Send, ^!+{[}
+            #+]::Send, ^!+{]}
 
-            ; Win + G -------------------------------- Go to Line
-                #g::
-                    Send ^{g}
-                Return
+            #Enter::Send, ^{Enter}
+            #+Enter::Send, ^+{Enter}
 
-            ; Win + H -------------------------------- Find and Replace Local
-                #h::
-                    Send ^{h}
-                return
-
-            ; Win + J -------------------------------- Toggle Terminal
-                #j::
-                    Send ^{j}
-                return
-
-            ; Win + L -------------------------------- Select Line
-                #l::
-                    Send ^{l}
-                return
-
-            ; Win + P -------------------------------- Files
-                #p::
-                    Send ^{p}
-                Return
-            ; Win + R -------------------------------- Run File
-                #r::
-                    Send ^{r}
-                Return
-
-            ; Win + S -------------------------------- Save File
-                #s::
-                    Send ^{s}
-                Return
-
-            ; Win + T -------------------------------- New File
-                #t::
-                    Send ^{n}
-                Return
-
-            ; Win + Z -------------------------------- Undo
-                #z::
-                    Send ^{z}
-                Return
-
-            ; Win + \ -------------------------------- Split Window
-                #\::
-                    Send ^{\}
-                Return
-
-            ; Win + Enter ---------------------------- New Line Below
-                #Enter::
-                    Send ^{Enter}
-                Return
-
-            ; Win + Shift + Enter -------------------- New Line Above
-                #+Enter::
-                    Send ^+{Enter}
-                Return
-
-            ; Win + Shift + K ------------------------ Delete Line
-                #+k::
-                    Send ^+{k}
-                return
-
-            ; Win + Shift + P ------------------------ Settings
-                #+p::
-                    Send ^+{p}
-                Return
-
-            ; Win + Shift + Z ------------------------ Redo
-                #+z::
-                    Send ^+{z}
-                Return
-
-            ; Win + Alt + Left ----------------------- Previous Tab
-                #!Left::
-                    Send ^!{Left}
-                Return
-
-            ; Win + Alt + Right ---------------------- Forward Tab
-                #!Right::
-                    Send ^!{Right}
-                Return
-
+            #!j::Send, ^!{j}
+            #!s::Send, ^!{s}
+            #^j::Send, ^!+{j}
+            #+c::Send, ^!+{c}
+            #+d::Send, ^!+{d}
+            #+g::Send, ^!+{g}
+            #+k::Send, ^+{k}
+            #+m::Send, ^!+{m}
+            #+n::Send, ^!+{n}
+            #+p::Send, ^+{p}
+            #+r::Send, ^+{r}
+            #+s::Send, ^!+{s}
+            #+t::Send, ^+{t}
+            #+v::Send, ^!+{v}
+            #+w::Send, ^+{w}
+            #+x::Send, ^!+{x}
+            #+z::Send, ^+{z}
+            #1::Send, ^!{1}
+            #2::Send, ^!{2}
+            #3::Send, ^!{3}
+            #4::Send, ^!{4}
+            #5::Send, ^!{5}
+            #6::Send, ^!{6}
+            #n::Send, ^!+{n}
             ; Win + Alt + Mouse Wheel ---------------- Mouse Wheel
                 #!WheelLeft::
                     tabLeft()
@@ -449,40 +395,57 @@ programs_PID := {}
 ;=                          |  __|--| \ ||--|__/ /__\ |                             ;
 ;=                           \__/|__|  \||__|  \/    \|__                           ;
 ;===================================================================================;
-    ; Win + A -------------------------------- Select All
-        #a::
-            Send ^{a}
-        Return
+        #a::Send, ^{a}
+        #b::Send, ^{b}
+        #c::Send, ^{c}
+        #d::Send, ^{d}
+        ; #e::Send, ^{e}
+        #f::Send, ^{f}
+        #g::Send, ^{g}
+        #h::Send, ^{h}
+        #i::Send, ^{i}
+        #j::Send, ^{j}
+        #k::Send, ^{k}
+        ; #l::Send, ^{l}
+        #l::Send {LCtrl down}{l}{LCtrl up}
+        #m::Send, ^{m}
+        #n::Send, ^{n}
+        #o::Send, ^{o}
+        #p::Send, ^{p}
+        #q::Send, !{F4}
+        #r::Send, ^{r}
+        #s::Send, ^{s}
+        #t::Send, ^{t}
+        #u::Send, ^{u}
+        #v::Send, ^{v}
+        #x::Send, ^{x}
+        #y::Send, ^{y}
+        #z::Send, ^{z}
+        #w::Send, ^{w}
+        #1::Send, ^{1}
+        #2::Send, ^{2}
+        #3::Send, ^{3}
+        #4::Send, ^{4}
+        #5::Send, ^{5}
+        #6::Send, ^{6}
+        #7::Send, ^{7}
+        #8::Send, ^{8}
+        #9::Send, ^{9}
+        #0::Send, ^{0}
+        #\::Send, ^{\}
+        #/::Send, ^{/}
+        #]::Send, ^{]}
+        #[::Send, ^{[}
+        #Tab::Send, !{Tab}
+        #+Tab::Send, !+{Tab}
+        !BS::Send {LShift down}{LCtrl down}{Left}{LShift Up}{Lctrl up}{Del} ; Delete Previous Word
+        !Delete::Send {LShift down}{LCtrl down}{Right}{LShift Up}{Lctrl up}{Del} ; Delete Next Workd
+        #BS::Send {LShift down}{Home}{LShift Up}{Del} ; Delete Whole Line
 
-    ; Win + C -------------------------------- Copy
-        #c::
-            Send ^{c}
-        Return
-
-    ; Win + F -------------------------------- Find
-        #f::
-            Send ^{f}
-        Return
-
-    ; Win + V -------------------------------- Paste
-        #v::
-            Send ^{v}
-        Return
-
-    ; Win + X -------------------------------- Cut
-        #x::
-            Send ^{x}
-        Return
-
-    ; Win + Tab ------------------------------ Alt + Tab
-        #Tab::
-            Send !{Tab}
-        Return
-
-    ; Win + Shift + Tab ---------------------- Alt + Shift + Tab
-        #+Tab::
-            Send !+{Tab}
-        Return
+        ; #Up::Send {Lctrl down}{Home}{Lctrl up}
+        ; #Down::Send {Lctrl down}{End}{Lctrl up}
+        ; #Left::Send {Home}
+        ; #Right::Send {End}
 
     ; Alt + E --------------------------------------------------- Alt Tab File Explorer
         !e::
@@ -543,16 +506,6 @@ programs_PID := {}
             GroupAdd, rogerExplorers, ahk_class CabinetWClass
             Sleep 50
             WinActive("File Explorer")
-        Return
-
-    ; Win + Q --------------------------------------------------- Close Program
-        #q::
-            closeTask()
-        Return
-
-    ; Win + W --------------------------------------------------- Close Window
-        #w::
-            closeTabOrWindow()
         Return
 
     ; Win + Numpad . -------------------------------------------- Run AutoHotKey Spy
