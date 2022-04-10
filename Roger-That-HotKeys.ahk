@@ -359,7 +359,9 @@ programs_PID := {}
             #^j::Send, ^!+{j}
             #+c::Send, ^!+{c}
             #+d::Send, ^!+{d}
+            #+f::Send, ^+{f}
             #+g::Send, ^!+{g}
+            #+h::Send, ^+{h}
             #+k::Send, ^+{k}
             #+m::Send, ^!+{m}
             #+n::Send, ^!+{n}
