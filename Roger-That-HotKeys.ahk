@@ -349,13 +349,14 @@ programs_PID := {}
             #+=::Send, ^+{=}
             #+[::Send, ^!+{[}
             #+]::Send, ^!+{]}
+            #!/::Send, ^!{/}
 
             #Enter::Send, ^{Enter}
             #+Enter::Send, ^+{Enter}
 
             #!j::Send, ^!{j}
             #!n::Send, ^!{n}
-            #!s::Send, ^!{s}
+            #!s::Send, !{s}
             #^j::Send, ^!+{j}
             #+c::Send, ^!+{c}
             #+d::Send, ^!+{d}
@@ -369,7 +370,7 @@ programs_PID := {}
             #+r::Send, ^+{r}
             #+s::Send, ^!+{s}
             #+t::Send, ^+{t}
-            #+v::Send, ^!+{v}
+            #+v::Send, ^+{v}
             #+w::Send, ^+{w}
             #+x::Send, ^!+{x}
             #+z::Send, ^+{z}
