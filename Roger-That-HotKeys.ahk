@@ -332,10 +332,15 @@ programs_PID := {}
         #IfWinActive ahk_exe Code.exe
             program := "ahk_exe Code.exe"
 
-            #!Down::Send, ^!+{Down}
-            #!Up::Send, ^!+{Up}
+            #!Down::Send, ^!{Down}
+            #!Up::Send, ^!{Up}
             #!Left::Send, ^!{Left}
             #!Right::Send, ^!{Right}
+
+            !BS::Send, ^{BS}
+
+            !Left::Send, ^{Left}
+            !Right::Send, ^{Right}
 
             #+0::Send, ^!{0}
             #-::Send, ^{-}
@@ -349,6 +354,7 @@ programs_PID := {}
             #+Enter::Send, ^+{Enter}
 
             #!j::Send, ^!{j}
+            #!n::Send, ^!{n}
             #!s::Send, ^!{s}
             #^j::Send, ^!+{j}
             #+c::Send, ^!+{c}
@@ -371,7 +377,7 @@ programs_PID := {}
             #4::Send, ^!{4}
             #5::Send, ^!{5}
             #6::Send, ^!{6}
-            #n::Send, ^!+{n}
+            #n::Send, ^!{n}
             ; Win + Alt + Mouse Wheel ---------------- Mouse Wheel
                 #!WheelLeft::
                     tabLeft()
