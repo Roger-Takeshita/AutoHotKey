@@ -1,0 +1,442 @@
+{
+    // "Table of Contents": {
+    //     "prefix": "table",
+    //     "body": [
+    //         "<h1 id='table-of-contents'>TABLE OF CONTENTS</h1>",
+    //         "",
+    //         "- [${WORKSPACE_NAME/(.*)/${1:/upcase}/}](#${WORKSPACE_NAME/(([\\w-]*)([^\\w\\s]*)*(\\s)*)/${2:/downcase}${4:+-}/g})",
+    //         "",
+    //         "# ${WORKSPACE_NAME/(.*)/${1:/upcase}/}",
+    //         "",
+    //         "[Go Back to Contents](#table-of-contents)",
+    //         "",
+    //         "$0"
+    //     ],
+    //     "description": "Table of Contents"
+    // },
+    // "New Item": {
+    //     "prefix": "!",
+    //     "body": ["- In `$1`", "", "\t```TypeScript", "\t\t$0", "\t```", ""],
+    //     "description": "New Item"
+    // },
+    "New Item": {
+        "prefix": "!",
+        "body": ["${1|In,On|} `$2`", "", "\t$0", ""],
+        "description": "New Item"
+    },
+    "Table of Contents": {
+        "prefix": "table",
+        "body": [
+            "<h1 id='table-of-contents'>TABLE OF CONTENTS</h1>",
+            "",
+            "- [${1:TITLE}](#$2)",
+            "",
+            "# ${1:TITLE}",
+            "",
+            "[Go Back to Contents](#table-of-contents)",
+            "",
+            "$0"
+        ],
+        "description": "Table of Contents"
+    },
+    // "# h1": {
+    //     "prefix": "#",
+    //     "body": [
+    //         "# $1",
+    //         "",
+    //         "$0"
+    //     ],
+    //     "description": "# h1"
+    // },
+    // "## h2": {
+    //     "prefix": "##",
+    //     "body": [
+    //         "## $1",
+    //         "",
+    //         "$0"
+    //     ],
+    //     "description": "## h2"
+    // },
+    // "### h3": {
+    //     "prefix": "###",
+    //     "body": [
+    //         "### $1",
+    //         "",
+    //         "$0"
+    //     ],
+    //     "description": "### h3"
+    // },
+    // "#### h4": {
+    //     "prefix": "####",
+    //     "body": [
+    //         "#### $1",
+    //         "",
+    //         "$0"
+    //     ],
+    //     "description": "#### h4"
+    // },
+    // "##### h5": {
+    //     "prefix": "#####",
+    //     "body": [
+    //         "##### $1",
+    //         "",
+    //         "$0"
+    //     ],
+    //     "description": "##### h5"
+    // },
+    "# h1": {
+        "prefix": "#",
+        "body": [
+            "# $1",
+            "",
+            "[Go Back to Contents](#table-of-contents)",
+            "",
+            "$0"
+        ],
+        "description": "# h1"
+    },
+    "## h2": {
+        "prefix": "##",
+        "body": [
+            "## $1",
+            "",
+            "[Go Back to Contents](#table-of-contents)",
+            "",
+            "$0"
+        ],
+        "description": "## h2"
+    },
+    "### h3": {
+        "prefix": "###",
+        "body": [
+            "### $1",
+            "",
+            "[Go Back to Contents](#table-of-contents)",
+            "",
+            "$0"
+        ],
+        "description": "### h3"
+    },
+    "#### h4": {
+        "prefix": "####",
+        "body": [
+            "#### $1",
+            "",
+            "[Go Back to Contents](#table-of-contents)",
+            "",
+            "$0"
+        ],
+        "description": "#### h4"
+    },
+    "##### h5": {
+        "prefix": "#####",
+        "body": ["##### $1", "", "$0"],
+        "description": "##### h5"
+    },
+    "~ h1": {
+        "prefix": "~",
+        "body": [
+            "<!-- ~> $CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE $CURRENT_DAY_NAME -->",
+            "",
+            "# $CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE $CURRENT_DAY_NAME",
+            "",
+            "$0"
+        ],
+        "description": "~ h1"
+    },
+    "~~ h2": {
+        "prefix": "~~",
+        "body": [
+            "<!-- ~~> $1 -->",
+            "",
+            "## $1",
+            "",
+            "[Go Back to Contents](#table-of-contents)",
+            "",
+            "$0"
+        ],
+        "description": "~~ h2"
+    },
+    "~~~ h3": {
+        "prefix": "~~~",
+        "body": [
+            "<!-- ~~~> $1 -->",
+            "",
+            "### $1",
+            "",
+            "[Go Back to Contents](#table-of-contents)",
+            "",
+            "$0"
+        ],
+        "description": "~~~ h3"
+    },
+    "~~~~ h4": {
+        "prefix": "~~~~",
+        "body": [
+            "<!-- ~~~~> $1 -->",
+            "",
+            "#### $1",
+            "",
+            "[Go Back to Contents](#table-of-contents)",
+            "",
+            "$0"
+        ],
+        "description": "~~~~ h4"
+    },
+    "[Go Back to Contents] Markdown": {
+        "prefix": "con",
+        "body": ["[Go Back to Contents](#table-of-contents)", "", "$0"],
+        "description": "[Go Back to Contents] Markdown"
+    },
+    "[Go Back to Main] Markdown": {
+        "prefix": "back",
+        "body": ["[⏮ Go Back to Main](../../README.md)"],
+        "description": "[Go Back to Main] Markdown"
+    },
+    "JavaScript Markdown": {
+        "prefix": "javascript",
+        "body": ["```JavaScript", "\t$0", "```"],
+        "description": "JavaScript Markdown"
+    },
+    "HTML Markdown": {
+        "prefix": "html",
+        "body": ["```HTML", "\t$0", "```"],
+        "description": "HTML Markdown"
+    },
+    "Bash Markdown": {
+        "prefix": "bash",
+        "body": ["```Bash", "\t$0", "```"],
+        "description": "Bash Markdown"
+    },
+    "Python Markdown": {
+        "prefix": "python",
+        "body": ["```Python", "\t$0", "```"],
+        "description": "Python Markdown"
+    },
+    "CSS Markdown": {
+        "prefix": "css",
+        "body": ["```CSS", "\t$0", "```"],
+        "description": "CSS Markdown"
+    },
+    "SCSS Markdown": {
+        "prefix": "scss",
+        "body": ["```SCSS", "\t$0", "```"],
+        "description": "SCSS Markdown"
+    },
+    "SASS Markdown": {
+        "prefix": "sass",
+        "body": ["```SCSS", "\t$0", "```"],
+        "description": "SASS Markdown"
+    },
+    "Ruby on Rails Markdown": {
+        "prefix": "ruby",
+        "body": ["```Ruby", "\t$0", "```"],
+        "description": "Ruby on Rails Markdown"
+    },
+    "Yaml Markdown": {
+        "prefix": "yaml",
+        "body": ["```Yaml", "\t$0", "```"],
+        "description": "Yaml Markdown"
+    },
+    "JSON Markdown": {
+        "prefix": "json",
+        "body": ["```JSON", "\t$0", "```"],
+        "description": "JSON Markdown"
+    },
+    "SQL Markdown": {
+        "prefix": "SQL",
+        "body": ["```SQL", "\t$0", "```"],
+        "description": "SQL Markdown"
+    },
+    "TypeScript Markdown": {
+        "prefix": "typescript",
+        "body": ["```TypeScript", "\t$0", "```"],
+        "description": "TypeScript Markdown"
+    },
+    "CoffeeScript Markdown": {
+        "prefix": "coffee",
+        "body": ["```Coffee", "\t$0", "```"],
+        "description": "CoffeeScript Markdown"
+    },
+    "C++ Markdown": {
+        "prefix": "c++",
+        "body": ["```C++", "\t$0", "```"],
+        "description": "C++ Markdown"
+    },
+    "Text Markdown": {
+        "prefix": "text",
+        "body": ["```Text", "\t$0", "```"],
+        "description": "Text Markdown"
+    },
+    "Go Markdown": {
+        "prefix": "go",
+        "body": ["```Go", "\t$0", "```"],
+        "description": "Go Markdown"
+    },
+    "Console Log": {
+        "prefix": "cl",
+        "body": ["console.log($1);$0"],
+        "description": "Console Log"
+    },
+    "Image Markdown": {
+        "prefix": "img",
+        "body": ["![]($1)$0"],
+        "description": "Image Markdown"
+    },
+    "Sub Folder Structure": {
+        "prefix": "subr",
+        "body": ["└──"],
+        "description": "Sub R Folder Structure"
+    },
+    "Sub R Folder Structure": {
+        "prefix": "subl",
+        "body": ["──┘"],
+        "description": "Sub L Folder Structure"
+    },
+    "Link": {
+        "prefix": "link",
+        "body": ["[${2:Title}](${1:URL})$0"],
+        "description": "Link"
+    },
+    "Issue Rollbar": {
+        "prefix": "issue_roll",
+        "body": [
+            "# ${1:rollbar_isssue}",
+            "",
+            "- **ROLLBAR ISSUE**",
+            "",
+            "\t- [${1:rollbar_isssue}](${2:rollbar_isssue_link})",
+            "",
+            "- **JIRA ISSUE**",
+            "",
+            "\t- [${3:jira_issue}](${4:jira_issue_link})",
+            "\t- `git checkout -b ${5|bug,maintenance,feature|}/$3-${6:your_description_here}`",
+            "\t- `$3 Should ${7:your_commit_msg_here}`",
+            "",
+            "- **GITHUB PULL REQUEST**",
+            "",
+            "\t- [#${12:github_pr}](${0:github_pull_request_link})",
+            "",
+            "<!-- ~> Error -->",
+            "",
+            "## Error",
+            "",
+            "- **ERROR:**",
+            "",
+            "\t- In `${8:file_path}`",
+            "",
+            "\t\t```Ruby",
+            "\t\t\t$9",
+            "\t\t```",
+            "",
+            "- **OCCURRENCES:**",
+            "",
+            "\t```Bash",
+            "\t\t$10",
+            "\t```",
+            "",
+            "- **FIX:**",
+            "",
+            "\t```Ruby",
+            "\t\t$11",
+            "\t```",
+            ""
+        ],
+        "description": "Issue Rollbar"
+    },
+    "Issue": {
+        "prefix": "issue",
+        "body": [
+            "# ${1:jira_issue}",
+            "",
+            "- **JIRA ISSUE**",
+            "",
+            "\t- [${2:jira_issue}](${3|https://teacherseat.atlassian.net/jira/software/projects/PREP/boards/4?selectedIssue=, https://teacherseat.atlassian.net/secure/RapidBoard.jspa?rapidView=1&projectKey=TS&modal=detail&selectedIssue=|}$2)",
+            "\t- `git checkout -b ${4|bug,maintenance,feature|}/$2-${5:your_description_here}`",
+            "\t- `$2 Should ${6:your_commit_msg_here}`",
+            "",
+            "- **GITHUB PULL REQUEST**",
+            "",
+            "\t- [#${10:github_pr}](${0:github_pull_request_link})",
+            "",
+            "<!-- ~> Error -->",
+            "",
+            "## Error",
+            "",
+            "- **ERROR:**",
+            "",
+            "\t- In `${7:file_path}`",
+            "",
+            "\t\t```Ruby",
+            "\t\t\t$8",
+            "\t\t```",
+            "",
+            "- **FIX:**",
+            "",
+            "\t```Ruby",
+            "\t\t$9",
+            "\t```",
+            ""
+        ],
+        "description": "Issue"
+    },
+    "Commit Rollbar": {
+        "prefix": "commit_rollbar",
+        "body": ["`#${1:Issue Number} - fix rb#${2:Rollbar Issue} Should $0`"],
+        "description": "Commit Rollbar"
+    },
+    "Commit Jira Bitbucket": {
+        "prefix": "commit_jira_bitbucket",
+        "body": ["`${1:Issue Number} #comment Should $0`"],
+        "description": "Commit Jira Bitbucket"
+    },
+    "Commit Jira GitHub": {
+        "prefix": "commit_jira_github",
+        "body": ["`${1:Issue Number} Should $0`"],
+        "description": "Commit Jira GitHub"
+    },
+    "Commit Amend": {
+        "prefix": "commitamend",
+        "body": [
+            "git commit --amend --no-edit --date=\"$CURRENT_DAY_NAME_SHORT $CURRENT_MONTH_NAME_SHORT $CURRENT_DATE $CURRENT_HOUR:$CURRENT_MINUTE:$CURRENT_SECOND $CURRENT_YEAR -0500\""
+        ],
+        "description": "Commit Amend"
+    },
+    "Descripton - Table 2x3": {
+        "prefix": "table2x3",
+        "body": [
+            "| ${1:Column Name} | ${2:Description} |",
+            "| ----------- | ----------- |",
+            "| $3            | $4            |",
+            "| $0            |             |"
+        ],
+        "description": "Table 2x3"
+    },
+    "Desc | Type - Table 3x3": {
+        "prefix": "table3x3",
+        "body": [
+            "| ${1:Column Name} | ${2:Description} | ${3:Type}  |",
+            "| ----------- | ----------- | ----- |",
+            "| $4            | $5            | $6      |",
+            "| $0            |             |       |"
+        ],
+        "description": "Table 3x3"
+    },
+    "Desc | Type | Ref - Table 4x3": {
+        "prefix": "table4x3",
+        "body": [
+            "| ${1:Column Name} | ${2:Description} | ${3:Type}  | ${4:Reference} |",
+            "| ----------- | ----------- | ----- | --------- |",
+            "| $5            | $6            | $7      | $8          |",
+            "| $0            |             |       |           |"
+        ],
+        "description": "Table 4x3"
+    },
+    "Branch Name": {
+        "prefix": "branch",
+        "body": [
+            "`git checkout -b ${1|feature,maintenance,bug|}/${2:ID}-${0:Description}`"
+        ],
+        "description": "Branch"
+    }
+}

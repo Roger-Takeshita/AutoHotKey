@@ -1,0 +1,163 @@
+{
+    "Base Colors": {
+        "prefix": "basecolors",
+        "body": [
+            "FGGY=$'\\e[38;5;240m'  # fg gray",
+            "FGWT=$'\\e[38;5;15m'   # fg white",
+            "FGLBL=$'\\e[38;5;117m' # fg light blue",
+            "FGLGN=$'\\e[38;5;2m'   # fg light green",
+            "FGLOG=$'\\e[38;5;215m' # fg light orange",
+            "FGLRD=$'\\e[38;5;1m'   # fg light red",
+            "FGRST=$'\\e[39m'       # fg reset color",
+            "",
+            "BGBL=$'\\e[48;5;27m'   # bg blue",
+            "BGGN=$'\\e[48;5;34m'   # bg green",
+            "BGOG=$'\\e[48;5;166m'  # bg orange",
+            "BGRD=$'\\e[48;5;196m'  # bg red",
+            "BGRST=$'\\e[49m'       # bg reset color"
+        ],
+        "description": "Base Colors"
+    },
+    "Colors": {
+        "prefix": "colors",
+        "body": [
+            "FGBL=$'\\e[38;5;27m'   # fg blue",
+            "FGGN=$'\\e[38;5;34m'   # bg green",
+            "FGGY=$'\\e[38;5;240m'  # fg gray",
+            "FGOG=$'\\e[38;5;166m'  # fg orange",
+            "FGRD=$'\\e[38;5;196m'  # fg red",
+            "FGYL=$'\\e[38;5;184m'  # fg yellow",
+            "FGWT=$'\\e[38;5;15m'   # fg white",
+            "FGLBL=$'\\e[38;5;117m' # fg light blue",
+            "FGLGN=$'\\e[38;5;2m'   # fg light green",
+            "FGLOG=$'\\e[38;5;215m' # fg light orange",
+            "FGLRD=$'\\e[38;5;1m'   # fg light red",
+            "FGLYL=$'\\e[38;5;228m' # fg light yellow",
+            "FGRST=$'\\e[39m'       # fg reset color",
+            "",
+            "BGBL=$'\\e[48;5;27m'   # bg blue",
+            "BGGY=$'\\e[48;5;240m'  # bg gray",
+            "BGGN=$'\\e[48;5;34m'   # bg green",
+            "BGOG=$'\\e[48;5;166m'  # bg orange",
+            "BGRD=$'\\e[48;5;196m'  # bg red",
+            "BGYL=$'\\e[48;5;184m'  # bg yellow",
+            "BGWT=$'\\e[48;5;15m'   # bg white",
+            "BGRST=$'\\e[49m'       # bg reset color"
+        ],
+        "description": "Colors"
+    },
+    "Base Format": {
+        "prefix": "baseformat",
+        "body": [
+            "FRST=$'\\e[0m'",
+            "DIM=$'\\e[2m'",
+            "NODIM=$'\\e[22m'",
+            "BOLD=$'\\e[1m'",
+            "NOBOLD=$'\\e[21m'",
+            "UNDER=$'\\e[4m'",
+            "NOUNDER=$'\\e[24m'"
+        ],
+        "description": "Base Format"
+    },
+    "Format": {
+        "prefix": "format",
+        "body": [
+            "RSTF=$'\\e[0m'",
+            "DIM=$'\\e[2m'",
+            "NODIM=$'\\e[22m'",
+            "BOLD=$'\\e[1m'",
+            "NOBOLD=$'\\e[21m'",
+            "ITALIC=$'\\e[3m'",
+            "UNDER=$'\\e[4m'",
+            "NOUNDER=$'\\e[24m'",
+            "BLINK=$'\\e[5m'",
+            "NOBLINK=$'\\e[25m'",
+            "INVERTED=$'\\e[7m'",
+            "NOINVERTED=$'\\e[27m'",
+            "HIDDEN=$'\\e[8m'",
+            "NOHIDDEN=$'\\e[28m'"
+        ],
+        "description": "Format"
+    },
+    "Sub Folder Structure": {
+        "prefix": "subr",
+        "body": ["└──"],
+        "description": "Sub R Folder Structure"
+    },
+    "Sub R Folder Structure": {
+        "prefix": "subl",
+        "body": ["──┘"],
+        "description": "Sub L Folder Structure"
+    },
+    "Print Message": {
+        "prefix": "msg",
+        "body": [
+            "print_msg() {",
+            "    local TYPE=\\$1",
+            "    local MSG1=\\$2",
+            "    local MSG2=\\$3",
+            "",
+            "    case \\${TYPE} in",
+            "        'ERROR')",
+            "            echo -e \"\\n   \\${BGRD}\\${FGWT} \\${TYPE}: \\${BGRST} \\${FGLRD}\\${MSG1}\\${FGRST}\"",
+            "            [ \"\\${MSG2}\" != '' ] && echo -e \"            \\${FGLBL}\\${MSG2}\\${FGRST}\"",
+            "            echo ''",
+            "            exit 1",
+            "            ;;",
+            "        'WARNING')",
+            "            echo -e \"\\n   \\${BGOG}\\${FGWT} \\${TYPE}: \\${BGRST} \\${FGLOG}\\${MSG1}\\${FGRST}\"",
+            "            [ \"\\${MSG2}\" != '' ] && echo -e \"              \\${FGLBL}\\${MSG2}\\${FGRST}\"",
+            "            echo ''",
+            "            ;;",
+            "        'SUCCESS')",
+            "            echo -e \"\\n   \\${BGGN}\\${FGWT} \\${TYPE}: \\${BGRST} \\${FGLGN}\\${MSG1}\\${FGRST}\"",
+            "            [ \"\\${MSG2}\" != '' ] && echo -e \"              \\${FGLBL}\\${MSG2}\\${FGRST}\"",
+            "            echo ''",
+            "            ;;",
+            "        'DONE')",
+            "            echo -e \"\\n   \\${BGGN}\\${FGWT} \\${TYPE}: \\${BGRST} \\${FGLGN}\\${MSG1}\\${FGRST}\"",
+            "            [ \"\\${MSG2}\" != '' ] && echo -e \"           \\${FGLBL}\\${MSG2}\\${FGRST}\"",
+            "            echo ''",
+            "            ;;",
+            "        'INFO')",
+            "            echo -e \"\\n   \\${BGBL}\\${FGWT} \\${TYPE}: \\${BGRST} \\${FGRST}\\${MSG1}\"",
+            "            [ \"\\${MSG2}\" != '' ] && echo -e \"           \\${FGLBL}\\${MSG2}\\${FGRST}\"",
+            "            echo ''",
+            "            ;;",
+            "        *)",
+            "            echo -e \"\\n   \\${TYPE}\\${BGRST}\\${FGRST}\"",
+            "            [ \"\\${MSG1}\" != '' ] && echo -e \"   \\${MSG1}\\${BGRST}\\${FGRST}\"",
+            "            [ \"\\${MSG2}\" != '' ] && echo -e \"   \\${MSG2}\\${BGRST}\\${FGRST}\"",
+            "            echo ''",
+            "            ;;",
+            "    esac",
+            "}"
+        ],
+        "description": "Print Message"
+    },
+    "Check Flags": {
+        "prefix": "check_flags",
+        "body": [
+            "ARGS=\\$@",
+            "",
+            "check_flags() {",
+            "\tlocal REGEX='([ ^]?(-(${1:flag})))'",
+            "\t",
+            "\tfor arg in \\$ARGS; do",
+            "\t\tif [[ \\$arg =~ \\$REGEX ]]; then",
+            "\t\t\tcase \\${BASH_REMATCH[2]} in",
+            "\t\t\t\t'-${1:flag}')",
+            "\t\t\t\t\tFLAG_1=1",
+            "\t\t\t\t\t;;",
+            "\t\t\tesac",
+            "\t\tfi",
+            "\tdone",
+            "\t",
+            "\tARGS=\\$(echo \\$ARGS | sed -E \"s/\\$REGEX//g\" | xargs)",
+            "}",
+            "",
+            "check_flags \\$ARGS"
+        ],
+        "description": "Check Flags"
+    }
+}
