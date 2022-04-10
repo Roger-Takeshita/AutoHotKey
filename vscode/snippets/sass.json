@@ -1,0 +1,64 @@
+{
+    "Width": {
+        "prefix": "width",
+        "body": ["width: $0"],
+        "description": "Width"
+    },
+    "Background-Color": {
+        "prefix": "bg",
+        "body": ["background-color: $0"],
+        "description": "Background-Color"
+    },
+    "RGB": {
+        "prefix": "rgb",
+        "body": ["rgb($1,$2,$3)"],
+        "description": "RGB"
+    },
+    "RGBA": {
+        "prefix": "rgba",
+        "body": ["rgb($1,$2,$3,$4)"],
+        "description": "RGBA"
+    },
+    "Inspect Background": {
+        "prefix": "inspect1",
+        "body": ["background-color: red // TODO REMOVE SASS"],
+        "description": "Inspect Background"
+    },
+    "Inspect Border": {
+        "prefix": "inspect2",
+        "body": ["border: 2px solid blue // TODO REMOVE SASS"],
+        "description": "Inspect Border"
+    },
+    "Inspect Text Color": {
+        "prefix": "inspect3",
+        "body": ["color: orange // TODO REMOVE SASS"],
+        "description": "Inspect Text Color"
+    },
+    "CSS Basic Reset": {
+        "prefix": "reset",
+        "body": [
+            "*,",
+            "*::before,",
+            "*::after",
+            "\tmargin: 0",
+            "\tpadding: 0",
+            "\tbox-sizing: border-box",
+            "",
+            "html",
+            "\theight: 100vh",
+            "\twidth: 100vw",
+            "",
+            "body,",
+            "#root",
+            "\theight: 100%",
+            "\twidth: 100%",
+            "\tfont-family: sans-serif",
+            "\tfont-weight: 400",
+            "\tline-height: 1",
+            "\tfont-size: 62.5%",
+            "",
+            "$0"
+        ],
+        "description": "CSS Basic Reset"
+    }
+}

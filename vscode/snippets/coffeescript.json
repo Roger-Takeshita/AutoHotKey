@@ -1,0 +1,41 @@
+{
+    "Console Log": {
+        "prefix": "cl",
+        "body": ["console.log \"$1 --->\", $1 # RogerThat - ${RELATIVE_FILEPATH} - console.log"],
+        "description": "Console Log"
+    },
+    "Console Log Debug": {
+        "prefix": "cld",
+        "body": [
+            "console.log {",
+            "\t'0-PATH': '${RELATIVE_FILEPATH}',",
+            "\t'1-DATA': {",
+            "\t\t$0",
+            "\t}",
+            "} # RogerThat - ${RELATIVE_FILEPATH} - console.log"
+        ],
+        "description": "Console Log Debug"
+    },
+    "Console Log I'm Here": {
+        "prefix": "cls",
+        "body": ["console.log \"<--- ${0:I'm Here} --->\" # RogerThat - ${RELATIVE_FILEPATH} - console.log string"],
+        "description": "Console Log String"
+    },
+    "Console Log JSON": {
+        "prefix": "clj",
+        "body": [
+            "console.log JSON.stringify ${1:Object}, undefined, 3 # RogerThat - ${RELATIVE_FILEPATH} - console.log JSON"
+        ],
+        "description": "Console Log JSON"
+    },
+    "m": {
+        "prefix": "m",
+        "body": ["m '$1'$0"],
+        "description": "m"
+    },
+    "m double": {
+        "prefix": "md",
+        "body": ["m \"$1\"$0"],
+        "description": "m double"
+    }
+}

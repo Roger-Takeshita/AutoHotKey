@@ -1,0 +1,71 @@
+{
+    "Print": {
+        "prefix": "print",
+        "body": ["print($1)$0"],
+        "description": "Print"
+    },
+    "Print Str": {
+        "prefix": "prints",
+        "body": ["print('$1 ' + $2)$0"],
+        "description": "Print Str"
+    },
+    "For Loop": {
+        "prefix": "for",
+        "body": ["for $1 in $2:", "   $0"],
+        "description": "For Loop"
+    },
+    "Function": {
+        "prefix": "def",
+        "body": [
+            "def ${1:function_name}($2):",
+            // "\t\"\"\"${3:Your Comment}\"\"\"",
+            "\t$0"
+        ],
+        "description": "Python Function"
+    },
+    "Class": {
+        "prefix": "class",
+        "body": ["class ${1:Class_Name}($2):", "\t${0:pass}"],
+        "description": "Python Class"
+    },
+    "self.assertEqual": {
+        "prefix": "se",
+        "body": ["self.assertEqual($0)"],
+        "description": "Test Equal"
+    },
+    "self.assertFalse": {
+        "prefix": "sf",
+        "body": ["self.assertFalse($0)"],
+        "description": "Test False"
+    },
+    "self.assertTrue": {
+        "prefix": "st",
+        "body": ["self.assertTrue($0)"],
+        "description": "Test True"
+    },
+    "self.assertContains": {
+        "prefix": "sc",
+        "body": ["self.assertContains($0)"],
+        "description": "Test Contains"
+    },
+    "self.assertNotIn": {
+        "prefix": "sni",
+        "body": ["self.assertNotIn($0)"],
+        "description": "Test NotIn"
+    },
+    "self.assertIn": {
+        "prefix": "si",
+        "body": ["self.assertIn($0)"],
+        "description": "Test In"
+    },
+    "from": {
+        "prefix": "from",
+        "body": ["from $1 import $0"],
+        "description": "from ... import ..."
+    },
+    "try": {
+        "prefix": "try",
+        "body": ["try:", "\t${0:pass}", "except Exception as error:", "\tprint(error.message)"],
+        "description": "try/except"
+    },
+}

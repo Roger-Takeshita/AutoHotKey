@@ -1,0 +1,33 @@
+{
+    "CSS Basic Reset": {
+        "prefix": "reset",
+        "body": [
+            "*,",
+            "*::before,",
+            "*::after {",
+            "\tmargin: 0;",
+            "\tpadding: 0;",
+            "\tbox-sizing: border-box;",
+            "}",
+            "",
+            "html {",
+            "\theight: 100vh;",
+            "\twidth: 100vw;",
+            "\tscroll-behavior: smooth;",
+            "}",
+            "",
+            "body,",
+            "#root {",
+            "\theight: 100%;",
+            "\twidth: 100%;",
+            "\tfont-family: sans-serif;",
+            "\tfont-weight: 400;",
+            "\tline-height: 1;",
+            "\tfont-size: 62.5%;",
+            "}",
+            "",
+            "$0"
+        ],
+        "description": "CSS Basic Reset"
+    }
+}

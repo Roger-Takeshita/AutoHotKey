@@ -1,0 +1,18 @@
+{
+    "Commit Message": {
+        "prefix": "commit",
+        "body": [
+            "${1|feat,docs,style,fix,maintenance,refactor,test,revert,build|}: Should ${2:...}",
+            ""
+        ],
+        "description": "Commit Message"
+    },
+    "Commit JIRA Message": {
+        "prefix": "commit_j",
+        "body": [
+            "${1:#JIRA_ISSUE} Should ${0:...}",
+            ""
+        ],
+        "description": "Commit JIRA Message"
+    }
+}

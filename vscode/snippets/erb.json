@@ -1,0 +1,22 @@
+{
+    "Link To": {
+        "prefix": "link_to",
+        "body": ["<%= link_to \"${1:Some Page}\", ${2:some}_path$3 %>$0"],
+        "description": "Link To"
+    },
+    "Button To": {
+        "prefix": "button_to",
+        "body": ["<%= button_to \"${1:Button Label}\", $2 %>$0"],
+        "description": "Button To"
+    },
+    "Embedded1": {
+        "prefix": "embedded1",
+        "body": ["<% $0 %>"],
+        "description": "<% %>"
+    },
+    "Embedded2": {
+        "prefix": "embedded2",
+        "body": ["<%= $0 %>"],
+        "description": "<%= %>"
+    }
+}
